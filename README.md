@@ -36,7 +36,7 @@ Visit the site at [template](https://template.leosarmento.com)
 A Form component with multiple input field types, validations, and type-safe features.
 
 Visit the demo at [@leosarmento/DynamicForm](https://form.leosarmento.com)  
-GitHub Repository: [@leosarmento/dynamic-form](https://github.com/leosarmento/dynamic-form)  
+GitHub Repository: [@LeonardoSarmento/dynamic-form](https://github.com/LeonardoSarmento/dynamic-form)  
 Connect on LinkedIn: [@leosarmento/LinkedIn](https://linkedin.com/in/leonardo-araujo-sarmento)  
 Explore Portfolio: [@leosarmento/portfolio](https://leosarmento.com)
 
