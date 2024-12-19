@@ -7,7 +7,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { enUS, fr, ptBR, es, zhCN } from 'react-day-picker/locale';
 import { DayPicker, labelNext, labelPrevious, useDayPicker, type DayPickerProps } from 'react-day-picker';
 
-import { DateLocaleSchema, DateLocaleType, ModeSchemaType } from '../../types/options/Date';
+import { DateLocaleSchema, DateLocaleType, ModeSchemaType } from '../../types/schemas/Date';
 
 import { Button, buttonVariants } from './button';
 

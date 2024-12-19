@@ -281,14 +281,14 @@ export const FileUploaderItem = forwardRef<HTMLDivElement, { index: number } & R
 FileUploaderItem.displayName = 'FileUploaderItem';
 
 export const FileInput = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & { disabled?: boolean }>(
-  ({ className, children, ...props }, ref) => {
+  ({ className, children, disabled, ...props }, ref) => {
     const { dropzoneState, isFileTooBig, isLOF } = useFileUpload();
-    const rootProps = isLOF ? {} : dropzoneState.getRootProps();
+    const rootProps = isLOF || disabled ? {} : dropzoneState.getRootProps();
     return (
       <div
         ref={ref}
         {...props}
-        className={`relative w-full ${isLOF ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
+        className={`relative w-full ${isLOF || disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
       >
         <div
           className={cn(
@@ -307,9 +307,9 @@ export const FileInput = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDiv
         </div>
         <Input
           ref={dropzoneState.inputRef}
-          disabled={isLOF}
+          disabled={isLOF || disabled}
           {...dropzoneState.getInputProps()}
-          className={`${isLOF ? 'cursor-not-allowed' : ''}`}
+          className={`${isLOF || disabled ? 'cursor-not-allowed' : ''}`}
         />
       </div>
     );

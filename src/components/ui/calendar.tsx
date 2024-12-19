@@ -7,7 +7,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import * as React from 'react';
 import { DayPicker, labelNext, labelPrevious, useDayPicker, type DayPickerProps } from 'react-day-picker';
 import { enUS, fr, ptBR, es, zhCN } from 'react-day-picker/locale';
-import { DateLocaleSchema, DateLocaleType, ModeSchemaType } from '@/feature/DynamicForm/types/options/Date';
+import { DateLocaleSchema, DateLocaleType, ModeSchemaType } from '@/feature/DynamicForm/types/schemas/Date';
 
 export type CalendarProps = DayPickerProps & {
   /**

@@ -5,13 +5,10 @@ import { toast } from 'sonner';
 
 import Header from '@components/header';
 import DynamicForm from '@/feature/DynamicForm/DynamicForm';
-import {
-  DynamicSchemaTestingComponent,
-  DynamicSchemaTestingComponentType,
-} from '@/feature/DynamicForm/types/DynamicFormType';
 
 import { Form } from '@/feature/DynamicForm/components/ui/form';
 import { Button } from '@/feature/DynamicForm/components/ui/button';
+import { DynamicSchemaTestingComponent, DynamicSchemaTestingComponentType } from '@/feature/DynamicForm/SchemaFormTest';
 
 export const Route = createFileRoute('/')({
   component: ComponentsComponent,
@@ -221,7 +218,7 @@ function ComponentsComponent() {
                 name="date"
                 type="date"
                 mode="single"
-                customLocale='en-US'
+                customLocale="en-US"
               />
               <DynamicForm control={form.control} name="fileUpload" type="file-upload" />
             </div>
