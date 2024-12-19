@@ -109,7 +109,7 @@ function DynamicComponent<TFieldValues extends FieldValues>({
             day: 'numeric',
           },
       {
-        locale: props.type === 'date' ? props.locale || 'pt-BR' : 'pt-BR',
+        locale: props.type === 'date' ? props.customLocale || 'pt-BR' : 'pt-BR',
       },
     );
   }
@@ -187,38 +187,20 @@ function DynamicComponent<TFieldValues extends FieldValues>({
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
               <Calendar
+                {...props}
                 autoFocus
                 customMode={props.mode || 'single'}
-                customLocale={props.locale || 'pt-BR'}
+                customLocale={props.customLocale || 'pt-BR'}
                 selected={props.field.value}
                 numberOfMonths={props.mode === 'range' ? 2 : 1}
-                disabled={{ after: new Date() }}
+                disabled={{
+                  after: new Date(),
+                  ...(typeof props.disabled === 'object' && props.disabled ? props.disabled : {}),
+                }}
                 onSelect={props.field.onChange}
               />
             </PopoverContent>
           </Popover>
-        </>
-      );
-    case 'select':
-      return (
-        <>
-          <Select onValueChange={props.field.onChange} defaultValue={props.field.value}>
-            <FormControl>
-              <SelectTrigger>
-                <SelectValue
-                  placeholder={props.placeholder ?? 'Selecione uma das opções'}
-                  className={props.className}
-                />
-              </SelectTrigger>
-            </FormControl>
-            <SelectContent>
-              {props.selectOptions?.map((item) => (
-                <SelectItem key={item} value={item}>
-                  {item}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
         </>
       );
     case 'switch':
@@ -235,6 +217,28 @@ function DynamicComponent<TFieldValues extends FieldValues>({
           </FormControl>
         </>
       );
+    case 'select':
+      return (
+        <>
+          <Select onValueChange={props.field.onChange} defaultValue={props.field.value}>
+            <FormControl>
+              <SelectTrigger>
+                <SelectValue
+                  placeholder={props.placeholder ?? 'Selecione uma das opções'}
+                  className={props.className}
+                />
+              </SelectTrigger>
+            </FormControl>
+            <SelectContent>
+              {props.selectOptions?.map((item) => (
+                <SelectItem key={item.id} value={item.id} disabled={item.disabled}>
+                  {item.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </>
+      );
     case 'multi-select':
       return (
         <>
@@ -248,8 +252,8 @@ function DynamicComponent<TFieldValues extends FieldValues>({
             <MultiSelectorContent>
               <MultiSelectorList>
                 {props.multiSelectOptions?.map((item) => (
-                  <MultiSelectorItem key={item.id} value={item.name}>
-                    <span>{item.name}</span>
+                  <MultiSelectorItem key={item.id} value={item.label} disabled={item.disabled}>
+                    <span>{item.label}</span>
                   </MultiSelectorItem>
                 ))}
               </MultiSelectorList>
@@ -304,7 +308,9 @@ function DynamicComponent<TFieldValues extends FieldValues>({
                   <FormControl>
                     <RadioGroupItem value={item.id} disabled={item.disabled} />
                   </FormControl>
-                  <FormLabel className="font-normal">{item.label}</FormLabel>
+                  <FormLabel className={`${item.disabled ? 'text-muted-foreground' : 'text-primary'} font-normal`}>
+                    {item.label}
+                  </FormLabel>
                 </FormItem>
               ))}
             </RadioGroup>

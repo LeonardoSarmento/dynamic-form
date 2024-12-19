@@ -95,7 +95,7 @@ export const DateInputSchema = z.object({
   /* Array de opções para o component de date. */
   type: z.literal('date'),
   placeholder: z.string().optional(),
-  locale: DateLocaleSchema.optional(),
+  customLocale: DateLocaleSchema.optional(),
   mode: DateModeSchema,
   format: z.enum(['long', 'short']).default('long').optional(),
 });

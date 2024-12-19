@@ -6,7 +6,8 @@ export type MultiSelectType = z.infer<typeof MultiSelectSchema>;
 export const MultiSelectOptionsSchema = z
   .object({
     id: z.string(),
-    name: z.string(),
+    label: z.string(),
+    disabled: z.boolean().optional(),
   })
   .array();
 export type MultiSelectOptionsType = z.infer<typeof MultiSelectOptionsSchema>;
