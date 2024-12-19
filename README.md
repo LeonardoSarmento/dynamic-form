@@ -253,7 +253,7 @@ function DynamicFormComponent() {
                 label="Componente checkbox"
                 checkboxOptions={[
                   { id: 'opcao1', label: 'Opção 1' },
-                  { id: 'opcao2', label: 'Opção 2' },
+                  { id: 'opcao2', label: 'Opção 2', disabled: true },
                   { id: 'opcao3', label: 'Opção 3' },
                 ]}
               />
@@ -265,7 +265,7 @@ function DynamicFormComponent() {
                 comboboxOptions={[
                   { id: 'opcao1', label: 'Opção 1' },
                   { id: 'opcao2', label: 'Opção 2' },
-                  { id: 'opcao3', label: 'Opção 3' },
+                  { id: 'opcao3', label: 'Opção 3', disabled: true },
                 ]}
               />
               <DynamicForm
@@ -274,7 +274,7 @@ function DynamicFormComponent() {
                 type="radio"
                 label="Componente Radio"
                 radioOptions={[
-                  { id: 'all', label: 'Opção 1' },
+                  { id: 'all', label: 'Opção 1', disabled: true },
                   { id: 'mentions', label: 'Opção 2' },
                   { id: 'none', label: 'Opção 3' },
                 ]}
@@ -285,7 +285,11 @@ function DynamicFormComponent() {
                 label="Componente Select"
                 name="select"
                 type="select"
-                selectOptions={['opção 1', 'opção 2', 'opção 3', 'opção 4']}
+                selectOptions={[
+                  { id: 'opcao1', label: 'Opção 1' },
+                  { id: 'opcao2', label: 'Opção 2' },
+                  { id: 'opcao3', label: 'Opção 3', disabled: true },
+                ]}
               />
               <DynamicForm
                 control={form.control}
@@ -293,9 +297,9 @@ function DynamicFormComponent() {
                 type="multi-select"
                 label="Componente Multi Select"
                 multiSelectOptions={[
-                  { id: 'opcao1', name: 'Opção 1' },
-                  { id: 'opcao2', name: 'Opção 2' },
-                  { id: 'opcao3', name: 'Opção 3' },
+                  { id: 'opcao1', label: 'Opção 1' },
+                  { id: 'opcao2', label: 'Opção 2', disabled: true },
+                  { id: 'opcao3', label: 'Opção 3' },
                 ]}
               />
               <DynamicForm
@@ -312,7 +316,14 @@ function DynamicFormComponent() {
                 type="date"
                 mode="range"
               />
-              <DynamicForm control={form.control} label="Componente Data" name="date" type="date" mode="single" />
+              <DynamicForm
+                control={form.control}
+                label="Componente Data"
+                name="date"
+                type="date"
+                mode="single"
+                customLocale="en-US"
+              />
               <DynamicForm control={form.control} name="fileUpload" type="file-upload" />
             </div>
             <div className="flex justify-center gap-x-3">
