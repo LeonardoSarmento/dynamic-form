@@ -72,6 +72,11 @@ const data: SidebarMenuOptions = {
       url: 'https://instagram.com/leonardo.a.sarmento',
       icon: Icons.instagram,
     },
+    {
+      title: 'Email',
+      url: 'mailto: leonardo.a.sarmento@gmail.com?subject=ThisIsMyFeedback&body=Hello!',
+      icon: Icons.email,
+    },
   ],
   projects: [
     {
@@ -80,9 +85,24 @@ const data: SidebarMenuOptions = {
       icon: Icons.contactRound,
     },
     {
+      title: 'DynamicForm',
+      url: 'https://dynamicform.leosarmento.com/',
+      icon: Icons.form,
+    },
+    {
       title: 'Template',
       url: 'https://template.leosarmento.com/',
       icon: Icons.template,
+    },
+    {
+      title: 'Games',
+      url: 'https://games.leosarmento.com/',
+      icon: Icons.startGame,
+    },
+    {
+      title: 'Data Table',
+      url: 'https://datatable.leosarmento.com/',
+      icon: Icons.datatable,
     },
     {
       title: 'Router',
@@ -107,7 +127,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
         <SidebarMenu>
-          <SidebarMenuItem className='space-y-3'>
+          <SidebarMenuItem className="space-y-3">
             <SidebarMenuButton size="lg" asChild>
               <Link href="/">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
