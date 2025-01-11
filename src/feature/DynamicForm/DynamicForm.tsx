@@ -78,11 +78,11 @@ export default function DynamicForm<TFieldValues extends FieldValues>({
       control={props.control}
       name={props.name}
       render={({ field }) => (
-        <FormItem className={cn('flex flex-col space-y-0.5', props.classNameItem)}>
-          {props.hideLabel ? null : <FormLabel className="mb-1">{props.label}</FormLabel>}
+        <FormItem className={cn('flex flex-col space-y-0.5', props.classnameitem)}>
+          {props.hidelabel ? null : <FormLabel className="mb-1">{props.label}</FormLabel>}
           {DynamicComponent({ field, hint, ...props })}
-          {props.hideDescription ? null : <FormDescription>{props.description}</FormDescription>}
-          {props.hideErrorMessage ? null : <FormMessage className={props.classNameMessage} />}
+          {props.hidedescription ? null : <FormDescription>{props.description}</FormDescription>}
+          {props.hideerrormessage ? null : <FormMessage className={props.classnamemessage} />}
         </FormItem>
       )}
     />
@@ -204,8 +204,9 @@ function DynamicComponent<TFieldValues extends FieldValues>({
           </Popover>
         </>
       );
-    case 'switch':
-      const { type: switchType, ...switchRest } = props;
+    case 'switch': {
+      const { type, ...switchRest } = props;
+      console.log(type);
       return (
         <>
           <FormControl>
@@ -213,8 +214,10 @@ function DynamicComponent<TFieldValues extends FieldValues>({
           </FormControl>
         </>
       );
-    case 'select':
-      const { type: selectType, ...selectRest } = props;
+    }
+    case 'select': {
+      const { type, ...selectRest } = props;
+      console.log(type);
       return (
         <>
           <Select onValueChange={props.field.onChange} defaultValue={props.field.value}>
@@ -224,7 +227,7 @@ function DynamicComponent<TFieldValues extends FieldValues>({
               </SelectTrigger>
             </FormControl>
             <SelectContent>
-              {props.selectOptions?.map((item) => (
+              {props.selectoptions?.map((item) => (
                 <SelectItem key={item.id} value={item.id} disabled={item.disabled}>
                   {item.label}
                 </SelectItem>
@@ -233,8 +236,10 @@ function DynamicComponent<TFieldValues extends FieldValues>({
           </Select>
         </>
       );
-    case 'multi-select':
-      const { type: multiSelectType, ...multiSelectRest } = props;
+    }
+    case 'multi-select': {
+      const { type, ...multiSelectRest } = props;
+      console.log(type);
       return (
         <>
           <MultiSelector onValuesChange={props.field.onChange} values={props.field.value}>
@@ -243,7 +248,7 @@ function DynamicComponent<TFieldValues extends FieldValues>({
             </MultiSelectorTrigger>
             <MultiSelectorContent>
               <MultiSelectorList>
-                {props.multiSelectOptions?.map((item) => (
+                {props.multiselectoptions?.map((item) => (
                   <MultiSelectorItem key={item.id} value={item.label} disabled={item.disabled}>
                     <span>{item.label}</span>
                   </MultiSelectorItem>
@@ -253,11 +258,13 @@ function DynamicComponent<TFieldValues extends FieldValues>({
           </MultiSelector>
         </>
       );
-    case 'checkbox':
-      const { type: checkboxType, ...checkboxRest } = props;
+    }
+    case 'checkbox': {
+      const { type, ...checkboxRest } = props;
+      console.log(type);
       return (
         <>
-          {props.checkboxOptions?.map((item) => (
+          {props.checkboxoptions?.map((item) => (
             <FormField
               key={item.id}
               control={props.control}
@@ -287,6 +294,7 @@ function DynamicComponent<TFieldValues extends FieldValues>({
           ))}
         </>
       );
+    }
     case 'radio':
       return (
         <>
@@ -297,7 +305,7 @@ function DynamicComponent<TFieldValues extends FieldValues>({
               defaultValue={props.field.value}
               className={cn('flex flex-col space-y-1', props.className)}
             >
-              {props.radioOptions.map((item) => (
+              {props.radiooptions.map((item) => (
                 <FormItem key={item.id} className="flex items-center space-x-3 space-y-0">
                   <FormControl>
                     <RadioGroupItem value={item.id} disabled={item.disabled} />
@@ -311,8 +319,9 @@ function DynamicComponent<TFieldValues extends FieldValues>({
           </FormControl>
         </>
       );
-    case 'combobox':
-      const { type: comboboxType, ...comboboxRest } = props;
+    case 'combobox': {
+      const { type, handlecustomselect, ...comboboxRest } = props;
+      console.log(type);
       return (
         <>
           <Popover>
@@ -323,31 +332,31 @@ function DynamicComponent<TFieldValues extends FieldValues>({
                   variant="outline"
                   role="combobox"
                   className={cn(
-                    `h-9 w-[200px] justify-between text-sm ${!props.field.value && 'font-normal text-muted-foreground'}`,
+                    `h-9 justify-between text-sm ${!props.field.value && 'font-normal text-muted-foreground'}`,
                     props.className,
                   )}
                 >
                   {props.field.value
-                    ? props.comboboxOptions.find((item) => item.id === props.field.value)?.label
+                    ? props.comboboxoptions.find((item) => item.id === props.field.value)?.label
                     : (props.placeholder ?? 'Selecione uma opção')}
                   <ChevronsUpDown className="opacity-50" />
                 </Button>
               </FormControl>
             </PopoverTrigger>
-            <PopoverContent className="w-[200px] p-0">
+            <PopoverContent className="p-0">
               <Command>
                 <CommandInput placeholder="Procure aqui" className="h-9" />
                 <CommandList>
-                  <CommandEmpty>Opção não encontrada</CommandEmpty>
+                  <CommandEmpty>{props.optionsnotfoundtext ?? 'Opção não encontrada'}</CommandEmpty>
                   <CommandGroup>
-                    {props.comboboxOptions.map((item) => (
+                    {props.comboboxoptions.map((item) => (
                       <CommandItem
                         key={item.id}
                         value={item.label}
                         disabled={item.disabled}
                         className={props.classNameCommandItem}
                         onSelect={(value) => {
-                          props.onCustomSelect?.(value);
+                          handlecustomselect?.(value);
                           props.field.onChange(item.id);
                         }}
                       >
@@ -362,6 +371,7 @@ function DynamicComponent<TFieldValues extends FieldValues>({
           </Popover>
         </>
       );
+    }
     case 'file-upload':
       return (
         <>
@@ -393,30 +403,30 @@ function DynamicComponent<TFieldValues extends FieldValues>({
           </FileUploader>
         </>
       );
-    default:
+    default: {
+      const { mask, ...inputRest } = props;
       return (
         <>
           <FormControl>
             <Input
-              {...props}
-              {...props.field}
-              className={props.className}
-              placeholder={props.placeholder}
-              maxLength={
-                props.mask === 'phone' || props.mask === 'ip' ? 15 : props.mask === 'macAddress' ? 17 : undefined
-              }
+              {...inputRest}
+              {...inputRest.field}
+              className={inputRest.className}
+              placeholder={inputRest.placeholder}
+              maxLength={mask === 'phone' || mask === 'ip' ? 15 : mask === 'macAddress' ? 17 : undefined}
               onChange={(e) => {
                 const { value } = e.target;
-                if (props.mask) {
-                  e.target.value = applyMaskToInput(props.mask, value);
+                if (mask) {
+                  e.target.value = applyMaskToInput(mask, value);
                 }
-                props.field.onChange(e);
+                inputRest.field.onChange(e);
               }}
               hint={hint}
             />
           </FormControl>
         </>
       );
+    }
   }
 }
 

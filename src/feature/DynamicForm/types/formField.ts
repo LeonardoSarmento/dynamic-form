@@ -59,7 +59,7 @@ type RadioT = {
 
 type ComboboxItemT = {
   type: 'combobox';
-  onCustomSelect?: (value: string) => void;
+  handlecustomselect?: (value: string) => void;
   classNameCommandItem?: string;
 } & Omit<ButtonProps, 'type'> &
   React.RefAttributes<HTMLButtonElement>;

@@ -17,21 +17,21 @@ const DynamicFormSchema = z.object({
   /* Texto que será renderizado antes do usuários preencher o campo ou título do componente. */
 
   /* Se deve esconder a renderização da mensagem de error. */
-  hideErrorMessage: z.boolean().optional(),
+  hideerrormessage: z.boolean().optional(),
 
   /* Se deve esconder a renderização do componente label do hook-form. */
-  hideLabel: z.boolean().optional(),
+  hidelabel: z.boolean().optional(),
 
   /* Se deve esconder a renderização do componente description do hook-form. */
-  hideDescription: z.boolean().optional(),
+  hidedescription: z.boolean().optional(),
 
   description: z.string().optional(),
 
   label: z.string().optional(),
 
-  classNameItem: z.string().optional(),
+  classnameitem: z.string().optional(),
 
-  classNameMessage: z.string().optional(),
+  classnamemessage: z.string().optional(),
 });
 
 export const DynamicFormTypeSchema = z

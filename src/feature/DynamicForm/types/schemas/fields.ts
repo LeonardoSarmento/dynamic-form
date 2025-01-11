@@ -13,9 +13,9 @@ export const baseInputSchema = z.object({
     .union([
       z.literal('cnpj'),
       z.literal('cpf'),
-      z.literal('phone'),
       z.literal('ip'),
       z.literal('macAddress'),
+      z.literal('phone'),
       z.function().args(z.string()).returns(z.string()),
     ])
     .optional(),
@@ -24,28 +24,29 @@ export const baseInputSchema = z.object({
 export const ComboboxInputSchema = z.object({
   /* Array de opções para o component de combobox. */
   type: z.literal('combobox'),
-  comboboxOptions: ComboboxOptionsSchema,
+  comboboxoptions: ComboboxOptionsSchema,
   placeholder: z.string().optional(),
+  optionsnotfoundtext: z.string().optional(),
 });
 
 export const SelectInputSchema = z.object({
   /* Array de opções para o component de select. */
   type: z.literal('select'),
-  selectOptions: SelectOptionsSchema,
+  selectoptions: SelectOptionsSchema,
   placeholder: z.string().optional(),
 });
 
 export const MultiSelectInputSchema = z.object({
   type: z.literal('multi-select'),
   /* Array de opções para o component de multi-select. */
-  multiSelectOptions: MultiSelectOptionsSchema,
+  multiselectoptions: MultiSelectOptionsSchema,
   placeholder: z.string().optional(),
 });
 
 export const CheckboxInputSchema = z.object({
   /* Array de opções para o component de checkbox. */
   type: z.literal('checkbox'),
-  checkboxOptions: CheckboxOptionsSchema,
+  checkboxoptions: CheckboxOptionsSchema,
 });
 
 export const SwitchInputSchema = z.object({
@@ -72,5 +73,5 @@ export const DateInputSchema = z.object({
 export const RadioInputSchema = z.object({
   /* Array de opções para o component de radio. */
   type: z.literal('radio'),
-  radioOptions: RadioOptionsSchema,
+  radiooptions: RadioOptionsSchema,
 });
