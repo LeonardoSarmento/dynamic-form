@@ -251,7 +251,7 @@ function DynamicFormComponent() {
                 name="checkbox"
                 type="checkbox"
                 label="Componente checkbox"
-                checkboxOptions={[
+                checkboxoptions={[
                   { id: 'opcao1', label: 'Opção 1' },
                   { id: 'opcao2', label: 'Opção 2', disabled: true },
                   { id: 'opcao3', label: 'Opção 3' },
@@ -262,7 +262,7 @@ function DynamicFormComponent() {
                 name="combobox"
                 type="combobox"
                 label="Componente Combobox"
-                comboboxOptions={[
+                comboboxoptions={[
                   { id: 'opcao1', label: 'Opção 1' },
                   { id: 'opcao2', label: 'Opção 2' },
                   { id: 'opcao3', label: 'Opção 3', disabled: true },
@@ -273,7 +273,7 @@ function DynamicFormComponent() {
                 name="radio"
                 type="radio"
                 label="Componente Radio"
-                radioOptions={[
+                radiooptions={[
                   { id: 'all', label: 'Opção 1', disabled: true },
                   { id: 'mentions', label: 'Opção 2' },
                   { id: 'none', label: 'Opção 3' },
@@ -285,7 +285,7 @@ function DynamicFormComponent() {
                 label="Componente Select"
                 name="select"
                 type="select"
-                selectOptions={[
+                selectoptions={[
                   { id: 'opcao1', label: 'Opção 1' },
                   { id: 'opcao2', label: 'Opção 2' },
                   { id: 'opcao3', label: 'Opção 3', disabled: true },
@@ -296,7 +296,7 @@ function DynamicFormComponent() {
                 name="multiSelect"
                 type="multi-select"
                 label="Componente Multi Select"
-                multiSelectOptions={[
+                multiselectoptions={[
                   { id: 'opcao1', label: 'Opção 1' },
                   { id: 'opcao2', label: 'Opção 2', disabled: true },
                   { id: 'opcao3', label: 'Opção 3' },
