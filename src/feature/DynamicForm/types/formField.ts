@@ -71,6 +71,10 @@ type FileUploadT = {
     disabled?: boolean;
   } & React.RefAttributes<HTMLDivElement>;
 
+type LinkT = {
+  type: 'link';
+} & InputProps;
+
 type InputT = {
   type: 'input';
 } & InputProps;
@@ -87,4 +91,5 @@ export type ExtendedFormProps =
   | RadioT
   | ComboboxItemT
   | FileUploadT
+  | LinkT
   | InputT;

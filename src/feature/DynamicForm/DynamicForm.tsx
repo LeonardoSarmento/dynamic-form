@@ -30,6 +30,7 @@ import { applyMacAddressMask } from './types/schemas/MacAddress';
 import { applyIPMask } from './types/schemas/Ip';
 import { applyCPFMask } from './types/schemas/Cpf';
 import { BaseInputT } from './types/formField';
+import { HyperlinkInput } from './components/extensions/hyperlink';
 
 const FileSvgDraw = () => {
   return (
@@ -403,6 +404,29 @@ function DynamicComponent<TFieldValues extends FieldValues>({
           </FileUploader>
         </>
       );
+    case 'link': {
+      const { mask, ...linkRest } = props;
+      return (
+        <>
+          <FormControl>
+            <HyperlinkInput
+              {...linkRest}
+              {...linkRest.field}
+              className={linkRest.className}
+              placeholder={linkRest.placeholder}
+              onChange={(e) => {
+                const { value } = e.target;
+                if (mask) {
+                  e.target.value = applyMaskToInput(mask, value);
+                }
+                linkRest.field.onChange(e);
+              }}
+              hint={hint}
+            />
+          </FormControl>
+        </>
+      );
+    }
     default: {
       const { mask, ...inputRest } = props;
       return (

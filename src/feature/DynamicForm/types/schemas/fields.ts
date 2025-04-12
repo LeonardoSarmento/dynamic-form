@@ -7,7 +7,7 @@ import { RadioOptionsSchema } from './RadioGroup';
 import { SelectOptionsSchema } from './Select';
 
 export const baseInputSchema = z.object({
-  type: z.enum(['input', 'password', 'number', 'textarea']),
+  type: z.enum(['input', 'password', 'number', 'textarea', 'link']),
   placeholder: z.string(),
   mask: z
     .union([

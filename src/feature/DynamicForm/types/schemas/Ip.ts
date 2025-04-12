@@ -22,7 +22,9 @@ export function applyIPMask(value: string): string {
 }
 
 export const IpSchema = z
-  .string()
+  .string({
+    required_error: 'IP é obrigatório.',
+  })
   .min(1, { message: 'IP não pode ser vazio' })
   .refine(
     (ip) => {

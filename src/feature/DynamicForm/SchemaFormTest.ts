@@ -21,13 +21,16 @@ export const DynamicSchemaTestingComponent = z.object({
     })
     .min(2, { message: 'Conteúdo deve ter pelo menos 2 caracteres.' })
     .trim(),
-  email: z.string().email({ message: 'E-mail inválido.' }).trim(),
+  email: z.string({
+    required_error: 'E-mail é obrigatório.',
+  }).email({ message: 'E-mail inválido.' }).trim(),
   link: z
-    .string()
+    .string({
+      required_error: 'Link é obrigatório.',
+    })
     .refine((value) => /^(https?):\/\/(?=.*\.[a-z]{2,})[^\s$.?#].[^\s]*$/i.test(value), {
       message: 'Por favor, escreva uma URL válida.',
-    })
-    .optional(),
+    }),
   cnpj: cnpj(),
   phone: PhoneSchema,
   macAddress: MacAddress,
@@ -46,7 +49,12 @@ export const DynamicSchemaTestingComponent = z.object({
       message: 'Senha deve conter pelo menos um caractere especial: !@#$%^&*.',
     })
     .trim(),
-  number: z.number().int().positive().min(1, 'Valor mínimo de 1.').max(100, 'Valor máximo de 100.'),
+  number: z
+    .number({ required_error: 'Número é obrigatório.' })
+    .int()
+    .positive()
+    .min(1, 'Valor mínimo de 1.')
+    .max(100, 'Valor máximo de 100.'),
   checkbox: CheckboxSchema,
   combobox: ComboboxSchema,
   select: SelectSchema,
