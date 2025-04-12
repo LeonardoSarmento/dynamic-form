@@ -4,8 +4,9 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 import Header from '@components/header';
-import DynamicForm from '@/feature/DynamicForm/DynamicForm';
+import { showErrorsAsToasts } from '@lib/error-messages';
 
+import DynamicForm from '@/feature/DynamicForm/DynamicForm';
 import { Form } from '@/feature/DynamicForm/components/ui/form';
 import { Button } from '@/feature/DynamicForm/components/ui/button';
 import { DynamicSchemaTestingComponent, DynamicSchemaTestingComponentType } from '@/feature/DynamicForm/SchemaFormTest';
@@ -31,11 +32,16 @@ function ComponentsComponent() {
     },
   });
 
-  const onSubmit = form.handleSubmit(() => {
-    toast.success('Testado com sucesso', {
-      description: 'Todos componentes estão prontos para uso!',
-    });
-  });
+  const onSubmit = form.handleSubmit(
+    () => {
+      toast.success('Testado com sucesso', {
+        description: 'Todos componentes estão prontos para uso!',
+      });
+    },
+    (error) => {
+      showErrorsAsToasts(error)
+    },
+  );
 
   function handleReset() {
     form.reset({
@@ -75,16 +81,17 @@ function ComponentsComponent() {
               <DynamicForm
                 control={form.control}
                 name="email"
-                label="Componente Input para E-mail"
+                label="Componente Input/Link para E-mail"
                 placeholder="E-mail"
-                type="input"
+                type="link"
+                description="email@mail.com"
               />
               <DynamicForm
                 control={form.control}
                 name="link"
-                label="Componente Input para Link"
+                label="Componente Input/Link para Link"
                 placeholder="Link"
-                type="input"
+                type="link"
                 description="https://example.com"
               />
               <DynamicForm
