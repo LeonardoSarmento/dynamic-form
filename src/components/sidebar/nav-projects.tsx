@@ -19,6 +19,7 @@ import {
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { SidebarMenuOptions } from './app-sidebar';
 import { CopyToClipboardRoute } from '@services/utils/utils';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@components/ui/tooltip';
 
 export function NavProjects({ projects }: { projects: SidebarMenuOptions['projects'] }) {
   const { isMobile } = useSidebar();
@@ -29,12 +30,19 @@ export function NavProjects({ projects }: { projects: SidebarMenuOptions['projec
       <SidebarMenu>
         {projects.map((item) => (
           <SidebarMenuItem key={item.title}>
-            <SidebarMenuButton asChild>
-              <a href={item.url} target="_blank" rel="noopener noreferrer">
-                {item.icon ? <item.icon /> : null}
-                <span>{item.title}</span>
-              </a>
-            </SidebarMenuButton>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <SidebarMenuButton asChild>
+                  <a href={item.url} target="_blank" rel="noopener noreferrer">
+                    {item.icon ? <item.icon /> : null}
+                    <span>{item.title}</span>
+                  </a>
+                </SidebarMenuButton>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{item.title}</p>
+              </TooltipContent>
+            </Tooltip>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuAction showOnHover>

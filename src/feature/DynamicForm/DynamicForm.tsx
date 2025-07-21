@@ -120,10 +120,10 @@ function DynamicComponent<TFieldValues extends FieldValues>({
       return (
         <InputPassword
           {...props}
+          {...props.field}
           className={props.className}
           placeholder={props.placeholder}
           type="password"
-          {...props.field}
         />
       );
     case 'number':
@@ -157,7 +157,7 @@ function DynamicComponent<TFieldValues extends FieldValues>({
       return (
         <>
           <Popover>
-            <PopoverTrigger asChild>
+            <PopoverTrigger asChild disabled={props.disabledInput}>
               <FormControl>
                 <Button
                   variant={'outline'}
@@ -166,6 +166,7 @@ function DynamicComponent<TFieldValues extends FieldValues>({
                     props.mode === 'single'
                       ? !props.field.value && 'text-muted-foreground'
                       : !props.field.value?.from && !props.field.value?.to && 'text-muted-foreground',
+                    props.className,
                   )}
                 >
                   {props.mode === 'single' ? (
@@ -239,12 +240,12 @@ function DynamicComponent<TFieldValues extends FieldValues>({
       );
     }
     case 'multi-select': {
-      const { type, ...multiSelectRest } = props;
+      const { type, disabledTrigger, itensShown, ...multiSelectRest } = props;
       console.log(type);
       return (
         <>
           <MultiSelector onValuesChange={props.field.onChange} values={props.field.value}>
-            <MultiSelectorTrigger>
+            <MultiSelectorTrigger disabledTrigger={disabledTrigger || props.disabled} itensShown={itensShown}>
               <MultiSelectorInput {...multiSelectRest} placeholder={props.placeholder ?? 'Selecione suas opções'} />
             </MultiSelectorTrigger>
             <MultiSelectorContent>
@@ -272,7 +273,7 @@ function DynamicComponent<TFieldValues extends FieldValues>({
               name={props.name}
               render={({ field }) => {
                 return (
-                  <FormItem key={item.id} className="flex flex-row items-center space-x-3 space-y-0">
+                  <FormItem key={item.id} className="flex flex-row items-center space-y-0 space-x-3">
                     <FormControl>
                       <Checkbox
                         {...checkboxRest}
@@ -285,7 +286,9 @@ function DynamicComponent<TFieldValues extends FieldValues>({
                         }}
                       />
                     </FormControl>
-                    <FormLabel className={cn(`text-sm font-normal`, item.disabled ? 'text-muted-foreground' : '')}>
+                    <FormLabel
+                      className={cn(`cursor-pointer text-sm font-normal`, item.disabled ? 'text-muted-foreground' : '')}
+                    >
                       {item.label}
                     </FormLabel>
                   </FormItem>
@@ -307,7 +310,7 @@ function DynamicComponent<TFieldValues extends FieldValues>({
               className={cn('flex flex-col space-y-1', props.className)}
             >
               {props.radiooptions.map((item) => (
-                <FormItem key={item.id} className="flex items-center space-x-3 space-y-0">
+                <FormItem key={item.id} className="flex items-center space-y-0 space-x-3">
                   <FormControl>
                     <RadioGroupItem value={item.id} disabled={item.disabled} />
                   </FormControl>
@@ -333,7 +336,7 @@ function DynamicComponent<TFieldValues extends FieldValues>({
                   variant="outline"
                   role="combobox"
                   className={cn(
-                    `h-9 justify-between text-sm ${!props.field.value && 'font-normal text-muted-foreground'}`,
+                    `h-9 justify-between text-sm ${!props.field.value && 'text-muted-foreground font-normal'}`,
                     props.className,
                   )}
                 >
@@ -385,9 +388,9 @@ function DynamicComponent<TFieldValues extends FieldValues>({
           >
             <FileInput
               {...props}
-              className={cn('outline-dashed outline-1 outline-white', props.disabled ? 'opacity-40' : 'opacity-100')}
+              className={cn('outline-1 outline-white outline-dashed', props.disabled ? 'opacity-40' : 'opacity-100')}
             >
-              <div className="flex w-full flex-col items-center justify-center pb-4 pt-3">
+              <div className="flex w-full flex-col items-center justify-center pt-3 pb-4">
                 <FileSvgDraw />
               </div>
             </FileInput>
@@ -437,7 +440,7 @@ function DynamicComponent<TFieldValues extends FieldValues>({
               {...inputRest.field}
               className={inputRest.className}
               placeholder={inputRest.placeholder}
-              maxLength={mask === 'phone' || mask === 'ip' ? 15 : mask === 'macAddress' ? 17 : undefined}
+              maxLength={mask === 'phone' ? 15 : undefined}
               onChange={(e) => {
                 const { value } = e.target;
                 if (mask) {

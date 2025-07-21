@@ -19,18 +19,18 @@ import { Icons } from '@components/icons/icon';
 type NavOptions = {
   title: string;
   url: LinkOptions['to'];
-  icon?: LucideIcon | ((props: React.SVGProps<SVGSVGElement>) => JSX.Element);
+  icon?: LucideIcon | ((props: React.SVGProps<SVGSVGElement>) => React.JSX.Element);
 };
 type OuterLink = {
   title: string;
   url: string;
-  icon?: LucideIcon | ((props: React.SVGProps<SVGSVGElement>) => JSX.Element);
+  icon?: LucideIcon | ((props: React.SVGProps<SVGSVGElement>) => React.JSX.Element);
 };
 
 type SidebarOptions = {
   title: string;
   url: LinkOptions['to'];
-  icon: LucideIcon | ((props: React.SVGProps<SVGSVGElement>) => JSX.Element);
+  icon: LucideIcon | ((props: React.SVGProps<SVGSVGElement>) => React.JSX.Element);
   isActive?: boolean;
   items?: NavOptions[];
 };
@@ -90,6 +90,11 @@ const data: SidebarMenuOptions = {
       icon: Icons.form,
     },
     {
+      title: 'TStart + Better-Auth Template',
+      url: 'https://tss-better-auth-drizzle.leosarmento.com/',
+      icon: Icons.tree,
+    },
+    {
       title: 'Template',
       url: 'https://template.leosarmento.com/',
       icon: Icons.template,
@@ -129,7 +134,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem className="space-y-3">
             <SidebarMenuButton size="lg" asChild>
-              <Link href="/">
+              <Link to="/">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                   <Icons.logo className="size-4" />
                 </div>

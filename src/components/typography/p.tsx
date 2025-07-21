@@ -6,7 +6,7 @@ type PType = {
 
 export function P({ children, ...props }: Readonly<PType>) {
   return (
-    <p {...props} className={cn('leading-7 [&:not(:first-child)]:mt-6', props.className)}>
+    <p {...props} className={cn('leading-7 not-first:mt-6', props.className)}>
       {children}
     </p>
   );

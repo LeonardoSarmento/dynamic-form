@@ -1,6 +1,7 @@
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react-swc';
-import { TanStackRouterVite } from '@tanstack/router-plugin/vite';
+import tanstackRouter from '@tanstack/router-plugin/vite';
+import tailwindcss from '@tailwindcss/vite';
 import path from 'path';
 
 // https://vite.dev/config/
@@ -15,7 +16,14 @@ export default defineConfig(({ mode }) => {
     server: {
       port: APP_PORT,
     },
-    plugins: [TanStackRouterVite(), react()],
+    plugins: [
+      tanstackRouter({
+        target: 'react',
+        autoCodeSplitting: true,
+      }), 
+      react(),
+      tailwindcss()
+    ],
     resolve: {
       alias: {
         '@assets': path.resolve(__dirname, './src/assets'),

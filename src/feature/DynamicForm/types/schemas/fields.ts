@@ -40,6 +40,8 @@ export const MultiSelectInputSchema = z.object({
   type: z.literal('multi-select'),
   /* Array de opções para o component de multi-select. */
   multiselectoptions: MultiSelectOptionsSchema,
+  disabledTrigger: z.boolean().optional(),
+  itensShown: z.number().optional(),
   placeholder: z.string().optional(),
 });
 
@@ -65,6 +67,7 @@ export const DateInputSchema = z.object({
   /* Array de opções para o component de date. */
   type: z.literal('date'),
   placeholder: z.string().optional(),
+  disabledInput: z.boolean().optional(),
   customLocale: DateLocaleSchema.optional(),
   mode: DateModeSchema,
   format: z.enum(['long', 'short']).default('long').optional(),

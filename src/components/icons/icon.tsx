@@ -52,6 +52,7 @@ import {
   LayoutList,
   NotebookPen,
   TableOfContents,
+  TreePalm,
 } from 'lucide-react';
 
 export const Icons = {
@@ -61,6 +62,7 @@ export const Icons = {
   pause: Pause,
   start: Play,
   score: Trophy,
+  tree: TreePalm,
   losses: CircleX,
   time: Clock,
   danger: TriangleAlert,
