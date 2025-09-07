@@ -33,33 +33,31 @@ import { BaseInputT } from './types/formField';
 import { HyperlinkInput } from './components/extensions/hyperlink';
 import { applyCurrencyMask } from './types/schemas/Currency';
 import { HierarchicalSelect } from './components/extensions/hierarchical-select';
+import { memo, useCallback } from 'react';
 
-const FileSvgDraw = () => {
-  return (
-    <>
-      <svg
-        className="mb-3 h-8 w-8 text-gray-500 dark:text-gray-400"
-        aria-hidden="true"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 20 16"
-      >
-        <path
-          stroke="currentColor"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-        />
-      </svg>
-      <p className="mb-1 text-sm text-gray-500 dark:text-gray-400">
-        <span className="font-semibold">Arraste seu arquivo</span>
-        &nbsp; ou clique para selecionar
-      </p>
-      <p className="text-xs text-gray-500 dark:text-gray-400">formato permitido: .CSV</p>
-    </>
-  );
-};
+const FileSvgDraw = memo(() => (
+  <>
+    <svg
+      className="mb-3 h-8 w-8 text-gray-500 dark:text-gray-400"
+      aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 20 16"
+    >
+      <path
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+      />
+    </svg>
+    <p className="mb-1 text-sm text-gray-500 dark:text-gray-400">
+      <span className="font-semibold">Arraste seu arquivo</span> ou clique para selecionar
+    </p>
+    <p className="text-xs text-gray-500 dark:text-gray-400">formato permitido: .CSV</p>
+  </>
+));
 
 const dropzone = {
   accept: {
@@ -95,51 +93,55 @@ export default function DynamicForm<TFieldValues extends FieldValues>({
 function DynamicComponent<TFieldValues extends FieldValues>({
   hint,
   ...props
-}: DynamicFormType<TFieldValues> & { field: ControllerRenderProps<TFieldValues, Path<TFieldValues>>; hint?: string }) {
-  function dateFormatter(date: Date) {
-    return intlFormat(
-      date,
-      props.type === 'date' && props.format === 'long'
-        ? {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-          }
-        : {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'numeric',
-            day: 'numeric',
-          },
-      {
-        locale: props.type === 'date' ? props.customLocale || 'pt-BR' : 'pt-BR',
-      },
-    );
-  }
+}: DynamicFormType<TFieldValues> & {
+  field: ControllerRenderProps<TFieldValues, Path<TFieldValues>>;
+  hint?: string;
+  format?: 'short' | 'long';
+  customLocale?: string;
+}) {
+  const dateFormatter = useCallback(
+    (date: Date) =>
+      intlFormat(
+        date,
+        props.type === 'date' && props.format === 'long'
+          ? { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
+          : { weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric' },
+        { locale: props.type === 'date' ? props.customLocale || 'pt-BR' : 'pt-BR' },
+      ),
+    [props.type, props.format, props.customLocale],
+  );
+
+  const maskInput = useCallback((mask: BaseInputT['mask'], value: string) => {
+    if (mask === 'cnpj') return applyCNPJMask(value);
+    if (mask === 'cpf') return applyCPFMask(value);
+    if (mask === 'phone') return applyPhoneMask(value);
+    if (mask === 'ip') return applyIPMask(value);
+    if (mask === 'macAddress') return applyMacAddressMask(value);
+    if (mask === 'currency') return applyCurrencyMask(value);
+    if (typeof mask === 'function') return mask(value);
+    return value;
+  }, []);
+
+  const handleCheckboxChange = useCallback(
+    (field: ControllerRenderProps<TFieldValues, Path<TFieldValues>>, id: string, checked: boolean) => {
+      field.onChange(checked ? [...(field.value || []), id] : field.value?.filter((v: string) => v !== id));
+    },
+    [],
+  );
+
   switch (props.type) {
     case 'password':
-      return (
-        <InputPassword
-          {...props}
-          {...props.field}
-          className={props.className}
-          placeholder={props.placeholder}
-          type="password"
-        />
-      );
+      return <InputPassword {...props} {...props.field} type="password" />;
     case 'number':
       return (
         <FormControl>
           <Input
             {...props}
+            {...props.field}
             type="number"
             min={0}
             step=".01"
-            className={props.className}
-            placeholder={props.placeholder}
             hint={hint}
-            {...props.field}
             onChange={(e) => props.field.onChange(Number(e.target.value))}
           />
         </FormControl>
@@ -147,12 +149,7 @@ function DynamicComponent<TFieldValues extends FieldValues>({
     case 'textarea':
       return (
         <FormControl>
-          <AutosizeTextarea
-            {...props}
-            className={cn('resize-none', props.className)}
-            placeholder={props.placeholder}
-            {...props.field}
-          />
+          <AutosizeTextarea {...props} {...props.field} className={cn('resize-none', props.className)} />
         </FormControl>
       );
     case 'date':
@@ -210,7 +207,6 @@ function DynamicComponent<TFieldValues extends FieldValues>({
       );
     case 'switch': {
       const { type, ...switchRest } = props;
-      console.log(type);
       return (
         <>
           <FormControl>
@@ -221,7 +217,6 @@ function DynamicComponent<TFieldValues extends FieldValues>({
     }
     case 'select': {
       const { type, ...selectRest } = props;
-      console.log(type);
       return (
         <>
           <Select onValueChange={props.field.onChange} defaultValue={props.field.value}>
@@ -243,15 +238,14 @@ function DynamicComponent<TFieldValues extends FieldValues>({
     }
     case 'multi-select': {
       const { type, disabledTrigger, itensShown, ...multiSelectRest } = props;
-      console.log(type);
       return (
         <>
           <MultiSelector onValuesChange={props.field.onChange} values={props.field.value}>
-            <MultiSelectorTrigger disabledTrigger={disabledTrigger || props.disabled} itensShown={itensShown}>
+            <MultiSelectorTrigger disabledTrigger={disabledTrigger || props.disabled} itemsShown={itensShown}>
               <MultiSelectorInput {...multiSelectRest} placeholder={props.placeholder ?? 'Selecione suas opções'} />
             </MultiSelectorTrigger>
             <MultiSelectorContent>
-              <MultiSelectorList>
+              <MultiSelectorList itemsCount={props.multiselectoptions.length}>
                 {props.multiselectoptions?.map((item) => (
                   <MultiSelectorItem key={item.id} value={item.label} disabled={item.disabled}>
                     <span>{item.label}</span>
@@ -265,7 +259,6 @@ function DynamicComponent<TFieldValues extends FieldValues>({
     }
     case 'checkbox': {
       const { type, ...checkboxRest } = props;
-      console.log(type);
       return (
         <>
           {props.checkboxoptions?.map((item) => (
@@ -281,11 +274,9 @@ function DynamicComponent<TFieldValues extends FieldValues>({
                         {...checkboxRest}
                         disabled={props.disabled ? true : item.disabled}
                         checked={field.value?.includes(item.id)}
-                        onCheckedChange={(checked) => {
-                          return checked
-                            ? field.onChange([...field.value, item.id])
-                            : field.onChange(field.value?.filter((value: string) => value !== item.id));
-                        }}
+                        onCheckedChange={(checked: boolean | 'indeterminate') =>
+                          handleCheckboxChange(field, item.id, checked === true)
+                        }
                       />
                     </FormControl>
                     <FormLabel
@@ -327,7 +318,6 @@ function DynamicComponent<TFieldValues extends FieldValues>({
       );
     case 'combobox': {
       const { type, handlecustomselect, ...comboboxRest } = props;
-      console.log(type);
       return (
         <>
           <Popover>
@@ -416,16 +406,7 @@ function DynamicComponent<TFieldValues extends FieldValues>({
           <FormControl>
             <HyperlinkInput
               {...linkRest}
-              {...linkRest.field}
-              className={linkRest.className}
-              placeholder={linkRest.placeholder}
-              onChange={(e) => {
-                const { value } = e.target;
-                if (mask) {
-                  e.target.value = applyMaskToInput(mask, value);
-                }
-                linkRest.field.onChange(e);
-              }}
+              onChange={(e) => props.field.onChange(maskInput(props.mask, e.target.value))}
               hint={hint}
             />
           </FormControl>
@@ -436,10 +417,7 @@ function DynamicComponent<TFieldValues extends FieldValues>({
       return (
         <>
           <FormControl>
-            <HierarchicalSelect
-              {...props}
-              {...props.field}
-            />
+            <HierarchicalSelect {...props} {...props.field} />
           </FormControl>
         </>
       );
@@ -452,16 +430,8 @@ function DynamicComponent<TFieldValues extends FieldValues>({
             <Input
               {...inputRest}
               {...inputRest.field}
-              className={inputRest.className}
-              placeholder={inputRest.placeholder}
               maxLength={mask === 'phone' ? 15 : undefined}
-              onChange={(e) => {
-                const { value } = e.target;
-                if (mask) {
-                  e.target.value = applyMaskToInput(mask, value);
-                }
-                inputRest.field.onChange(e);
-              }}
+              onChange={(e) => props.field.onChange(maskInput(props.mask, e.target.value))}
               hint={hint}
             />
           </FormControl>
@@ -469,24 +439,4 @@ function DynamicComponent<TFieldValues extends FieldValues>({
       );
     }
   }
-}
-
-function applyMaskToInput(mask: BaseInputT['mask'], value: string) {
-  if (mask === 'cnpj') {
-    return applyCNPJMask(value);
-  } else if (mask === 'cpf') {
-    return applyCPFMask(value);
-  } else if (mask === 'phone') {
-    return applyPhoneMask(value);
-  } else if (mask === 'ip') {
-    return applyIPMask(value);
-  } else if (mask === 'macAddress') {
-    return applyMacAddressMask(value);
-  } else if (mask === 'currency') {
-    return applyCurrencyMask(value);
-  } else if (typeof mask === 'function') {
-    return mask(value);
-  }
-  // If mask is undefined or does not match any condition
-  return value;
 }

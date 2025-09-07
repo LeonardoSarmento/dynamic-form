@@ -1,9 +1,9 @@
 import React, { useState, forwardRef } from 'react';
 import { Check, ChevronRight, ChevronsUpDown } from 'lucide-react';
-import { Button } from '@components/ui/button';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@components/ui/command';
-import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover';
-import { cn } from '@/lib/utils';
+import { Button } from '../ui/button';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '../ui/command';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { cn } from '../../lib/utils';
 
 export type HierarchicalOption = {
   id: string;
