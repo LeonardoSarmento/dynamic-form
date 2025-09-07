@@ -1,4 +1,5 @@
 import { defineConfig, loadEnv } from 'vite';
+import { VitePWA } from 'vite-plugin-pwa';
 import react from '@vitejs/plugin-react-swc';
 import tanstackRouter from '@tanstack/router-plugin/vite';
 import tailwindcss from '@tailwindcss/vite';
@@ -20,9 +21,45 @@ export default defineConfig(({ mode }) => {
       tanstackRouter({
         target: 'react',
         autoCodeSplitting: true,
-      }), 
+      }),
       react(),
-      tailwindcss()
+      tailwindcss(),
+      VitePWA({
+        registerType: 'autoUpdate',
+        injectRegister: false,
+        workbox: {
+          globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
+          cleanupOutdatedCaches: true,
+          clientsClaim: true,
+        },
+        pwaAssets: {
+          disabled: false,
+          config: true,
+        },
+        manifest: {
+          background_color: '#f0f0f0',
+          description:
+            'Project to display a Form component with multiple input field types, validations, and type-safe features.',
+          dir: 'ltr',
+          display: 'standalone',
+          id: '/',
+          name: 'DynamicForm',
+          orientation: 'portrait',
+          scope: '/',
+          short_name: 'DynamicForm',
+          start_url: '/',
+          theme_color: '#f0f0f0',
+          categories: ['portfolio', 'component', 'showcase', 'software', 'development'],
+          shortcuts: [],
+          lang: 'en',
+        },
+        devOptions: {
+          enabled: false,
+          navigateFallback: 'index.html',
+          suppressWarnings: true,
+          type: 'module',
+        },
+      }),
     ],
     resolve: {
       alias: {

@@ -14,6 +14,7 @@ import { CardHoverItemType, HoverEffect } from '@components/ui/extensions/card-h
 import React from 'react';
 import { Muted } from '@components/typography/muted';
 import { Icons } from '@components/icons/icon';
+import PWABadge from '@components/pwa/PWABadge';
 
 export const Route = createFileRoute('/')({
   component: ComponentsComponent,
@@ -379,6 +380,7 @@ function ComponentsComponent() {
         <span>©︎ 2025. Feito com muito carinho por Leonardo Araujo Sarmento</span>
         <Icons.logo />
       </Muted>
+      <PWABadge />
     </>
   );
 }
