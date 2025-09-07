@@ -1,10 +1,10 @@
-import { TanStackRouterDevtools } from '@components/DevTools/TanStackRouterDevtools';
+import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import { Suspense } from 'react';
 
 export function DevTools() {
   return (
     <Suspense>
-      <TanStackRouterDevtools position="bottom-left" />
+      <TanStackRouterDevtools initialIsOpen={false} position="bottom-left" />
     </Suspense>
   );
 }

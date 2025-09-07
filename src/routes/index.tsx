@@ -375,7 +375,7 @@ function ComponentsComponent() {
           </div>
         </form>
       </Form>
-      <Muted className="mx-auto flex gap-2 text-center items-center flex-wrap justify-center">
+      <Muted className="mx-auto flex cursor-[url('/thumbs-up.svg')_0_0,_pointer] flex-wrap items-center justify-center gap-2 text-center">
         <span>©︎ 2025. Feito com muito carinho por Leonardo Araujo Sarmento</span>
         <Icons.logo />
       </Muted>

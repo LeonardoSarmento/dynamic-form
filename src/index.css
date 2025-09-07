@@ -47,6 +47,7 @@
   --color-chart-5: hsl(var(--chart-5));
 
   --color-sidebar: hsl(var(--sidebar));
+  --color-sidebar-background: hsl(var(--sidebar-background));
   --color-sidebar-foreground: hsl(var(--sidebar-foreground));
   --color-sidebar-primary: hsl(var(--sidebar-primary));
   --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
@@ -142,6 +143,7 @@
     --radius: 0.5rem;
 
     --sidebar: 0 0% 98.5%;
+    --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 0 0% 14.5%;
     --sidebar-primary: 0 0% 20.5%;
     --sidebar-primary-foreground: 0 0% 98.5%;
@@ -181,8 +183,9 @@
     --chart-5: 340 75% 55%;
 
     --sidebar: 0 0% 20.5%;
+    --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 0 0% 98.5%;
-    --sidebar-primary: 264 100% 40%;
+    --sidebar-primary: 240 5.9% 10%;
     --sidebar-primary-foreground: 0 0% 98.5%;
     --sidebar-accent: 0 0% 26.9%;
     --sidebar-accent-foreground: 0 0% 98.5%;
