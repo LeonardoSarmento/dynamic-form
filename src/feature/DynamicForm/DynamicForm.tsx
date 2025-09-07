@@ -241,10 +241,14 @@ function DynamicComponent<TFieldValues extends FieldValues>({
       return (
         <>
           <MultiSelector onValuesChange={props.field.onChange} values={props.field.value}>
-            <MultiSelectorTrigger disabledTrigger={disabledTrigger || props.disabled} itemsShown={itensShown}>
-              <MultiSelectorInput {...multiSelectRest} placeholder={props.placeholder ?? 'Selecione suas opções'} />
-            </MultiSelectorTrigger>
+            <MultiSelectorTrigger
+              disabledTrigger={disabledTrigger || props.disabled}
+              placeholder={props.placeholder ?? 'Selecione suas opções'}
+              itemsShown={itensShown}
+              itemscount={props.multiselectoptions.filter((item) => !item.disabled).length}
+            />
             <MultiSelectorContent>
+              <MultiSelectorInput {...multiSelectRest} />
               <MultiSelectorList itemsCount={props.multiselectoptions.length}>
                 {props.multiselectoptions?.map((item) => (
                   <MultiSelectorItem key={item.id} value={item.label} disabled={item.disabled}>
@@ -380,7 +384,7 @@ function DynamicComponent<TFieldValues extends FieldValues>({
           >
             <FileInput
               {...props}
-              className={cn('outline-1 outline-white outline-dashed', props.disabled ? 'opacity-40' : 'opacity-100')}
+              className={cn('hover:border-primary border p-2', props.disabled ? 'opacity-40' : 'opacity-100')}
             >
               <div className="flex w-full flex-col items-center justify-center pt-3 pb-4">
                 <FileSvgDraw />
