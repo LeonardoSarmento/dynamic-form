@@ -1,14 +1,11 @@
 'use client';
 
-import React, { KeyboardEvent, createContext, forwardRef, useCallback, useContext, useState } from 'react';
-
+import { Badge } from '@/components/ui/badge';
+import { Command, CommandItem, CommandEmpty, CommandList } from '@/components/ui/command';
+import { cn } from '@/lib/utils';
 import { Command as CommandPrimitive } from 'cmdk';
 import { X as RemoveIcon, Check } from 'lucide-react';
-
-import { Badge } from '../ui/badge';
-import { Command, CommandItem, CommandEmpty, CommandList } from '../ui/command';
-
-import { cn } from '../../lib/utils';
+import React, { KeyboardEvent, createContext, forwardRef, useCallback, useContext, useState } from 'react';
 
 interface MultiSelectorProps extends React.ComponentPropsWithoutRef<typeof CommandPrimitive> {
   values: string[];
@@ -196,7 +193,7 @@ const MultiSelector = ({
 
 const MultiSelectorTrigger = forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & { disabledTrigger?: boolean, itensShown?: number }
+  React.HTMLAttributes<HTMLDivElement> & { disabledTrigger?: boolean; itensShown?: number }
 >(({ className, disabledTrigger = false, itensShown = 3, children, ...props }, ref) => {
   const { value, onValueChange, activeIndex } = useMultiSelect();
 
@@ -353,7 +350,7 @@ const MultiSelectorItem = forwardRef<
       onMouseDown={mousePreventDefault}
     >
       {children}
-      {isIncluded && <Check className="text-muted h-4 w-4" />}
+      {isIncluded && <Check className="text-primary h-4 w-4" />}
     </CommandItem>
   );
 });

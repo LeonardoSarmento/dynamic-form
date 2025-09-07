@@ -13,6 +13,7 @@ import { MacAddress } from '../DynamicForm/types/schemas/MacAddress';
 import { CpfSchema } from '../DynamicForm/types/schemas/Cpf';
 import { IpSchema } from '../DynamicForm/types/schemas/Ip';
 import cnpj from '../DynamicForm/types/schemas/CNPJ';
+import { HierarchicalSchema } from './types/schemas/Hierarchical';
 
 export const DynamicSchemaTestingComponent = z.object({
   input: z
@@ -59,6 +60,7 @@ export const DynamicSchemaTestingComponent = z.object({
   combobox: ComboboxSchema,
   select: SelectSchema,
   multiSelect: MultiSelectSchema,
+  hierarchical: HierarchicalSchema,
   radio: RadioSchema,
   switch: SwitchSchema,
   textarea: TextareaSchema,

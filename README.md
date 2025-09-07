@@ -259,6 +259,55 @@ function DynamicFormComponent() {
               />
               <DynamicForm
                 control={form.control}
+                name="hierarchical"
+                type="hierarchical"
+                label="Componente Hierarchical Select"
+                placeholder="Selecione uma opção"
+                maxSelected={5}
+                options={[
+                  { id: 'opcao1', label: 'Opção 1' },
+                  {
+                    id: 'opcao2',
+                    label: 'Opção 2',
+                    children: [
+                      { id: 'opcao2.1', label: 'Opção 2.2' },
+                      { id: 'opcao2.2', label: 'Opção 2.2' },
+                      { id: 'opcao2.3', label: 'Opção 2.3', disabled: true },
+                    ],
+                  },
+                  {
+                    id: 'opcao3',
+                    label: 'Opção 3',
+                    children: [
+                      { id: 'opcao3.1', label: 'Opção 3.1' },
+                      { id: 'opcao3.2', label: 'Opção 3.2' },
+                      { id: 'opcao3.3', label: 'Opção 3.3', disabled: true },
+                      {
+                        id: 'opcao3.4',
+                        label: 'Opção 3.4',
+                        children: [
+                          { id: 'opcao3.4.1', label: 'Opção 3.4.1', disabled: true },
+                          { id: 'opcao3.4.2', label: 'Opção 3.4.2' },
+                          { id: 'opcao3.4.3', label: 'Opção 3.4.3' },
+                        ],
+                      },
+                    ],
+                  },
+                  {
+                    id: 'opcao4',
+                    label: 'Opção 4',
+                    disabled: true,
+                    children: [
+                      { id: 'opcao4.1', label: 'Opção 4.1' },
+                      { id: 'opcao4.2', label: 'Opção 4.2' },
+                      { id: 'opcao4.3', label: 'Opção 4.3', disabled: true },
+                      { id: 'opcao4.4', label: 'Opção 4.4' },
+                    ],
+                  },
+                ]}
+              />
+              <DynamicForm
+                control={form.control}
                 name="combobox"
                 type="combobox"
                 label="Componente Combobox"

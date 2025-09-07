@@ -7,7 +7,7 @@ import { RadioOptionsSchema } from './RadioGroup';
 import { SelectOptionsSchema } from './Select';
 
 export const baseInputSchema = z.object({
-  type: z.enum(['input', 'password', 'number', 'textarea', 'link']),
+  type: z.enum(['input', 'password', 'number', 'hierarchical', 'textarea', 'link']),
   placeholder: z.string(),
   mask: z
     .union([
@@ -16,6 +16,7 @@ export const baseInputSchema = z.object({
       z.literal('ip'),
       z.literal('macAddress'),
       z.literal('phone'),
+      z.literal('currency'),
       z.function().args(z.string()).returns(z.string()),
     ])
     .optional(),

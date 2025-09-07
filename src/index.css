@@ -76,6 +76,9 @@
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
 
+  --animate-shine: shine 3s ease-out infinite;
+  --animate-gradient-flow: gradientFlow 10s ease 0s infinite normal none running;
+
   --breakpoint-xs: 380px;
 
   @keyframes accordion-down {
@@ -97,6 +100,30 @@
       height: 0;
     }
   }
+
+  @keyframes shine {
+    0% {
+      background-position: 200% 0;
+    }
+    25% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+  @keyframes gradientFlow {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
 }
 
 /*
@@ -108,7 +135,6 @@
   color utility to any element that depends on these defaults.
 */
 @layer base {
-
   *,
   ::after,
   ::before,
@@ -217,9 +243,7 @@
   }
 }
 
-
-
-.markdown-body>* {
+.markdown-body > * {
   all: revert;
 }
 

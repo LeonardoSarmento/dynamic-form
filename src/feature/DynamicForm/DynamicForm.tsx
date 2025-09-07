@@ -31,6 +31,8 @@ import { applyIPMask } from './types/schemas/Ip';
 import { applyCPFMask } from './types/schemas/Cpf';
 import { BaseInputT } from './types/formField';
 import { HyperlinkInput } from './components/extensions/hyperlink';
+import { applyCurrencyMask } from './types/schemas/Currency';
+import { HierarchicalSelect } from './components/extensions/hierarchical-select';
 
 const FileSvgDraw = () => {
   return (
@@ -430,6 +432,18 @@ function DynamicComponent<TFieldValues extends FieldValues>({
         </>
       );
     }
+    case 'hierarchical': {
+      return (
+        <>
+          <FormControl>
+            <HierarchicalSelect
+              {...props}
+              {...props.field}
+            />
+          </FormControl>
+        </>
+      );
+    }
     default: {
       const { mask, ...inputRest } = props;
       return (
@@ -468,6 +482,8 @@ function applyMaskToInput(mask: BaseInputT['mask'], value: string) {
     return applyIPMask(value);
   } else if (mask === 'macAddress') {
     return applyMacAddressMask(value);
+  } else if (mask === 'currency') {
+    return applyCurrencyMask(value);
   } else if (typeof mask === 'function') {
     return mask(value);
   }
