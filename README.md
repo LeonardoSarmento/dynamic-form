@@ -261,7 +261,7 @@ function DynamicFormComponent() {
                 control={form.control}
                 name="hierarchical"
                 type="hierarchical"
-                label="Componente Hierarchical Select"
+                label="Componente Hierarchical"
                 placeholder="Selecione uma opção"
                 maxSelected={5}
                 options={[
@@ -417,6 +417,7 @@ Supports custom masks through props. Pre-implemented options include:
 3. Phone
 4. MAC Address
 5. IP Address
+6. Currency
 
 You can also pass your custom mask.
 
@@ -440,6 +441,8 @@ Choose your preferred calendar mode:
 ### **Switch**
 
 ### **Checkbox**
+
+### **Hierarchical**
 
 ### **Radio**
 

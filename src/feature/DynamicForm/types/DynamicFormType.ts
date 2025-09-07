@@ -14,24 +14,18 @@ import {
 import { ExtendedFormProps } from './formField';
 
 const DynamicFormSchema = z.object({
-  /* Texto que será renderizado antes do usuários preencher o campo ou título do componente. */
-
-  /* Se deve esconder a renderização da mensagem de error. */
-  hideerrormessage: z.boolean().optional(),
-
-  /* Se deve esconder a renderização do componente label do hook-form. */
-  hidelabel: z.boolean().optional(),
-
-  /* Se deve esconder a renderização do componente description do hook-form. */
-  hidedescription: z.boolean().optional(),
-
-  description: z.string().optional(),
-
-  label: z.string().optional(),
-
   classnameitem: z.string().optional(),
 
+  hideerrormessage: z.boolean().optional(),
   classnamemessage: z.string().optional(),
+
+  label: z.string().optional(),
+  hidelabel: z.boolean().optional(),
+  classnamelabel: z.string().optional(),
+
+  description: z.string().optional(),
+  hidedescription: z.boolean().optional(),
+  classnamedescription: z.string().optional(),
 });
 
 export const DynamicFormTypeSchema = z
@@ -49,10 +43,8 @@ export const DynamicFormTypeSchema = z
   .and(DynamicFormSchema);
 
 export type DynamicFormType<TFieldValues extends FieldValues> = z.infer<typeof DynamicFormTypeSchema> & {
-  /* Propriedade control do hook useForm do react-hook-form. */
   control: Control<TFieldValues>;
 
-  /* Propriedade name do hook useForm do react-hook-form. */
   name: Path<TFieldValues>;
 
   className?: string;

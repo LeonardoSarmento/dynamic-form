@@ -126,19 +126,13 @@ const MultiSelector = ({
 
   return (
     <MultiSelectContext.Provider {...props} value={{ ...state, dispatch, inputRef }}>
-      {/* Popover controla o open/close e deve envolver os children:
-          o usuário deve passar <MultiSelectorTrigger/> e <MultiSelectorContent/> como children */}
       <Popover open={state.open} onOpenChange={handleOpenChange}>
-        {/* repassa a Command props/dir via children (MultiSelectorContent vai renderizar Command) */}
         {children}
       </Popover>
     </MultiSelectContext.Provider>
   );
 };
 
-/* --------------------------
-   Trigger (usa PopoverTrigger)
-   -------------------------- */
 interface TriggerProps extends React.HTMLAttributes<HTMLButtonElement> {
   disabledTrigger?: boolean;
   itemsShown?: number;
@@ -156,7 +150,6 @@ const MultiSelectorTrigger = forwardRef<HTMLButtonElement, TriggerProps>(
 
     const displayedValues = values.slice(0, itemsShown);
 
-    // PopoverTrigger precisa estar presente *dentro* do Popover (MultiSelector já o envolve)
     return (
       <PopoverTrigger asChild>
         <Button
@@ -164,7 +157,7 @@ const MultiSelectorTrigger = forwardRef<HTMLButtonElement, TriggerProps>(
           ref={ref}
           variant="outline"
           className={cn(
-            'text-muted-foreground flex h-auto min-h-9 w-full min-w-2xs flex-wrap justify-start gap-1 border-0 p-2',
+            'text-muted-foreground flex h-auto min-h-9 w-full flex-wrap justify-start gap-1 border-0 p-2',
             activeIndex === -1 && 'ring-1 focus-visible:ring-cyan-600',
             className,
           )}
@@ -221,13 +214,9 @@ const MultiSelectorTrigger = forwardRef<HTMLButtonElement, TriggerProps>(
 );
 MultiSelectorTrigger.displayName = 'MultiSelectorTrigger';
 
-/* --------------------------
-   Input
-   -------------------------- */
 const MultiSelectorInput = forwardRef<HTMLInputElement, React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>>(
   ({ className, placeholder = 'Procure aqui', ...props }, ref) => {
     const { inputValue, dispatch } = useMultiSelect();
-    // permite que o usuário passe ref ou usar o inputRef do contexto
     return (
       <div className="flex items-center px-3" cmdk-input-wrapper="">
         <MagnifyingGlassIcon className="mr-2 h-4 w-4 shrink-0 opacity-50" />
@@ -250,9 +239,6 @@ const MultiSelectorInput = forwardRef<HTMLInputElement, React.ComponentPropsWith
 );
 MultiSelectorInput.displayName = 'MultiSelectorInput';
 
-/* --------------------------
-   List
-   -------------------------- */
 interface ListProps extends React.ComponentPropsWithoutRef<typeof CommandPrimitive.List> {
   itemsCount?: number;
 }
@@ -323,9 +309,6 @@ const MultiSelectorList = forwardRef<HTMLDivElement, ListProps>(({ className, ch
 });
 MultiSelectorList.displayName = 'MultiSelectorList';
 
-/* --------------------------
-   Item
-   -------------------------- */
 interface ItemProps {
   value: string;
   children: ReactNode;
@@ -372,14 +355,10 @@ const MultiSelectorItem = forwardRef<
 });
 MultiSelectorItem.displayName = 'MultiSelectorItem';
 
-/* --------------------------
-   Content (garante ordem: Input -> outros -> List)
-   -------------------------- */
 const MultiSelectorContent = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ children, ...props }, ref) => {
     const { open, dispatch, inputRef } = useMultiSelect();
 
-    // keyboard handler (usa contexto)
     const handleKeyDown = useCallback(
       (e: KeyboardEvent<HTMLDivElement>) => {
         const target = inputRef.current;
@@ -397,7 +376,7 @@ const MultiSelectorContent = forwardRef<HTMLDivElement, React.HTMLAttributes<HTM
             if ((dispatch as any) && (e as any).target === target) {
               if ((dispatch as any) && inputRef.current && target.selectionStart === 0) {
                 // remove last selected
-                dispatch({ type: 'TOGGLE_VALUE', payload: '' }); // noop placeholder (keeps compatibility)
+                dispatch({ type: 'TOGGLE_VALUE', payload: '' });
               }
             }
             break;
@@ -409,7 +388,6 @@ const MultiSelectorContent = forwardRef<HTMLDivElement, React.HTMLAttributes<HTM
       [dispatch, inputRef],
     );
 
-    // organiza os children: encontra especificamente os componentes Input e List
     const childrenArray = React.Children.toArray(children) as React.ReactElement[];
     const isInput = (c: React.ReactElement) =>
       c && (c.type === MultiSelectorInput || (c.type as any)?.displayName === 'MultiSelectorInput');
@@ -425,13 +403,9 @@ const MultiSelectorContent = forwardRef<HTMLDivElement, React.HTMLAttributes<HTM
     return (
       <PopoverContent ref={ref} align="center" className="w-full p-0" {...props}>
         <div onKeyDown={handleKeyDown}>
-          {/* Command agrupa input e lista */}
           <Command>
-            {/* Input sempre acima */}
             {inputChild}
-            {/* outros children que o usuário passou (se houver) */}
             {otherChildren}
-            {/* lista sempre por último */}
             {listChild}
           </Command>
         </div>

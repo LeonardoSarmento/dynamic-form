@@ -12,7 +12,7 @@ export type HierarchicalOption = {
   children?: HierarchicalOption[];
 };
 
-export type HierarchicalSelectProps = {
+export type HierarchicalCheckboxProps = {
   options: HierarchicalOption[];
   value?: string[];
   onChange?: (values: string[]) => void;
@@ -25,7 +25,7 @@ export type HierarchicalSelectProps = {
   maxSelected?: number;
 };
 
-export const HierarchicalSelect = forwardRef<HTMLButtonElement, HierarchicalSelectProps>(
+export const HierarchicalCheckbox = forwardRef<HTMLButtonElement, HierarchicalCheckboxProps>(
   (
     {
       options,
@@ -248,4 +248,4 @@ export const HierarchicalSelect = forwardRef<HTMLButtonElement, HierarchicalSele
   },
 );
 
-HierarchicalSelect.displayName = 'HierarchicalSelect';
+HierarchicalCheckbox.displayName = 'HierarchicalCheckbox';

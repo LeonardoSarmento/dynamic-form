@@ -9,33 +9,6 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
 
-  --color-brand: hsl(var(--brand));
-  --color-brand-foreground: hsl(var(--brand-foreground));
-
-  --color-brand-secondary: hsl(var(--brand-secondary));
-  --color-brand-secondary-foreground: hsl(var(--brand-secondary-foreground));
-
-  --color-brand-text: hsl(var(--brand-text));
-  --color-brand-text-foreground: hsl(var(--brand-text-foreground));
-
-  --color-brand-contrast: hsl(var(--brand-contrast));
-  --color-brand-contrast-foreground: hsl(var(--brand-contrast-foreground));
-
-  --color-create: hsl(var(--create));
-  --color-create-foreground: hsl(var(--create-foreground));
-
-  --color-delete: hsl(var(--delete));
-  --color-delete-foreground: hsl(var(--delete-foreground));
-
-  --color-edit: hsl(var(--edit));
-  --color-edit-foreground: hsl(var(--edit-foreground));
-
-  --color-back: hsl(var(--back));
-  --color-back-foreground: hsl(var(--back-foreground));
-
-  --color-clear: hsl(var(--clear));
-  --color-clear-foreground: hsl(var(--clear-foreground));
-
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
 
@@ -73,6 +46,15 @@
   --color-chart-4: hsl(var(--chart-4));
   --color-chart-5: hsl(var(--chart-5));
 
+  --color-sidebar: hsl(var(--sidebar));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar-primary: hsl(var(--sidebar-primary));
+  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
+  --color-sidebar-border: hsl(var(--sidebar-border));
+  --color-sidebar-ring: hsl(var(--sidebar-ring));
+
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
 
@@ -85,7 +67,6 @@
     from {
       height: 0;
     }
-
     to {
       height: var(--radix-accordion-content-height);
     }
@@ -95,7 +76,6 @@
     from {
       height: var(--radix-accordion-content-height);
     }
-
     to {
       height: 0;
     }
@@ -126,14 +106,6 @@
   }
 }
 
-/*
-  The default border color has changed to `currentcolor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
-
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
-*/
 @layer base {
   *,
   ::after,
@@ -146,25 +118,6 @@
 
 @layer base {
   :root {
-    --brand: 191 71% 48%;
-    --brand-foreground: 191 71% 48%;
-    --brand-secondary: 191 97% 72%;
-    --brand-secondary-foreground: 191 97% 72%;
-    --brand-text: 208 23% 16%;
-    --brand-text-foreground: 208 23% 16%;
-    --brand-contrast: 23 93% 53%;
-    --brand-contrast-foreground: 23 93% 53%;
-    --create: 131 43% 43%;
-    --create-foreground: 131 43% 43%;
-    --delete: 10 82% 45%;
-    --delete-foreground: 10 82% 45%;
-    --edit: 191 71% 48%;
-    --edit-foreground: 191 71% 48%;
-    --back: 23 95% 53%;
-    --back-foreground: 23 95% 53%;
-    --clear: 191 71% 48%;
-    --clear-foreground: 191 71% 48%;
-
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
@@ -187,28 +140,18 @@
     --input: 0 0% 89.8%;
     --ring: 0 0% 3.9%;
     --radius: 0.5rem;
+
+    --sidebar: 0 0% 98.5%;
+    --sidebar-foreground: 0 0% 14.5%;
+    --sidebar-primary: 0 0% 20.5%;
+    --sidebar-primary-foreground: 0 0% 98.5%;
+    --sidebar-accent: 0 0% 97%;
+    --sidebar-accent-foreground: 0 0% 20.5%;
+    --sidebar-border: 0 0% 92.2%;
+    --sidebar-ring: 0 0% 70.8%;
   }
 
   .dark {
-    --brand: 191 71% 48%;
-    --brand-foreground: 191 71% 48%;
-    --brand-secondary: 211 65% 45%;
-    --brand-secondary-foreground: 211 65% 45%;
-    --brand-text: 208 23% 16%;
-    --brand-text-foreground: 208 23% 16%;
-    --brand-contrast: 23 93% 53%;
-    --brand-contrast-foreground: 23 93% 53%;
-    --create: 131 43% 43%;
-    --create-foreground: 131 43% 43%;
-    --delete: 10 82% 45%;
-    --delete-foreground: 10 82% 45%;
-    --edit: 191 71% 48%;
-    --edit-foreground: 191 71% 48%;
-    --back: 23 95% 53%;
-    --back-foreground: 23 95% 53%;
-    --clear: 191 71% 48%;
-    --clear-foreground: 191 71% 48%;
-
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
     --card: 0 0% 3.9%;
@@ -230,11 +173,21 @@
     --border: 0 0% 14.9%;
     --input: 0 0% 14.9%;
     --ring: 0 0% 83.1%;
+
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+
+    --sidebar: 0 0% 20.5%;
+    --sidebar-foreground: 0 0% 98.5%;
+    --sidebar-primary: 264 100% 40%;
+    --sidebar-primary-foreground: 0 0% 98.5%;
+    --sidebar-accent: 0 0% 26.9%;
+    --sidebar-accent-foreground: 0 0% 98.5%;
+    --sidebar-border: 0 0% 100% / 10%;
+    --sidebar-ring: 0 0% 43.9%;
   }
 
   ::-webkit-scrollbar {

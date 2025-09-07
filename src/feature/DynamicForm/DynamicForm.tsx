@@ -32,7 +32,7 @@ import { applyCPFMask } from './types/schemas/Cpf';
 import { BaseInputT } from './types/formField';
 import { HyperlinkInput } from './components/extensions/hyperlink';
 import { applyCurrencyMask } from './types/schemas/Currency';
-import { HierarchicalSelect } from './components/extensions/hierarchical-select';
+import { HierarchicalCheckbox } from './components/extensions/hierarchical-checkbox';
 import { memo, useCallback } from 'react';
 
 const FileSvgDraw = memo(() => (
@@ -80,9 +80,9 @@ export default function DynamicForm<TFieldValues extends FieldValues>({
       name={props.name}
       render={({ field }) => (
         <FormItem className={cn('flex flex-col space-y-0.5', props.classnameitem)}>
-          {props.hidelabel ? null : <FormLabel className="mb-1">{props.label}</FormLabel>}
+          {props.hidelabel ? null : <FormLabel className={cn("mb-1", props.type === 'checkbox' && 'text-center', props.classnamelabel)}>{props.label}</FormLabel>}
           {DynamicComponent({ field, hint, ...props })}
-          {props.hidedescription ? null : <FormDescription>{props.description}</FormDescription>}
+          {props.hidedescription ? null : <FormDescription className={props.classnamedescription}>{props.description}</FormDescription>}
           {props.hideerrormessage ? null : <FormMessage className={props.classnamemessage} />}
         </FormItem>
       )}
@@ -272,7 +272,7 @@ function DynamicComponent<TFieldValues extends FieldValues>({
               name={props.name}
               render={({ field }) => {
                 return (
-                  <FormItem key={item.id} className="flex flex-row items-center space-y-0 space-x-3">
+                  <FormItem key={item.id} className="flex flex-row mx-auto items-center space-y-0 space-x-3">
                     <FormControl>
                       <Checkbox
                         {...checkboxRest}
@@ -421,7 +421,7 @@ function DynamicComponent<TFieldValues extends FieldValues>({
       return (
         <>
           <FormControl>
-            <HierarchicalSelect {...props} {...props.field} />
+            <HierarchicalCheckbox {...props} {...props.field} />
           </FormControl>
         </>
       );

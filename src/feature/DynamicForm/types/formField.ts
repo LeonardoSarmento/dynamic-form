@@ -15,7 +15,7 @@ import { AutosizeTextAreaProps } from '../components/ui/autosize-textarea';
 import { CalendarProps } from '../components/ui/calendar';
 import { ButtonProps } from '../components/ui/button';
 import { InputProps } from '../components/ui/input';
-import { HierarchicalSelectProps } from '../components/extensions/hierarchical-select';
+import { HierarchicalCheckboxProps } from '../components/extensions/hierarchical-checkbox';
 
 export type BaseInputT = z.infer<typeof baseInputSchema>;
 
@@ -37,7 +37,7 @@ type DateT = {
 
 type HierarchicalT = {
   type: 'hierarchical';
-} & HierarchicalSelectProps;
+} & HierarchicalCheckboxProps;
 
 type SelectT = {
   type: 'select';
