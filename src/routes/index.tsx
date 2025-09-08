@@ -359,9 +359,15 @@ function ComponentsComponent() {
       macAddress: '',
       date: undefined,
       rangeDate: undefined,
+      combobox: undefined,
+      radio: undefined,
+      number: undefined,
+      switch: false,
+      select: undefined,
       checkbox: [],
       hierarchical: [],
       multiSelect: [],
+      fileUpload: [],
     });
   }
 

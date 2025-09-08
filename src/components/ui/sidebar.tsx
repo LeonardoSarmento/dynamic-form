@@ -13,6 +13,7 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useIsMobile } from '@services/hooks/use-mobile';
+import { useSwipeToToggle } from '@services/hooks/use-swipe-to-toggle';
 
 const SIDEBAR_COOKIE_NAME = 'sidebar_state';
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -147,6 +148,13 @@ function Sidebar({
   collapsible?: 'offcanvas' | 'icon' | 'none';
 }) {
   const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
+
+  useSwipeToToggle({
+    enabled: isMobile,
+    side,
+    onOpen: () => setOpenMobile(true),
+    onClose: () => setOpenMobile(false),
+  });
 
   if (collapsible === 'none') {
     return (

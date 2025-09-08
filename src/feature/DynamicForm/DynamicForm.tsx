@@ -345,17 +345,18 @@ function DynamicComponent<TFieldValues extends FieldValues>({
       );
     }
     case 'file-upload':
+      const { reSelect, ...rest } = props;
       return (
         <>
           <FileUploader
             value={props.field.value}
             onValueChange={props.field.onChange}
             dropzoneOptions={props.dropzone}
-            reSelect={props.reSelect}
+            reSelect={reSelect}
             className={props.className}
           >
             <FileInput
-              {...props}
+              {...rest}
               className={cn(
                 'hover:border-primary flex flex-col items-center justify-center rounded-md border-2 border-dashed p-6 transition-colors',
                 props.disabled && 'cursor-not-allowed opacity-40',
@@ -366,7 +367,12 @@ function DynamicComponent<TFieldValues extends FieldValues>({
             </FileInput>
             {props.field.value && props.field.value.length > 0 && (
               <div className="mt-1 space-y-1">
-                <ScrollArea className="h-32 max-w-full min-w-fit rounded-md border p-2">
+                <ScrollArea
+                  className={cn(
+                    'max-h-32 max-w-full min-w-fit rounded-md border p-2',
+                    `h-[${props.field.value.length * 9}px] overflow-y-auto`,
+                  )}
+                >
                   <FileUploaderContent>
                     {props.field.value.map((file: File, i: number) => (
                       <TooltipComponentProvider key={i} tooltipContent={file.name}>
