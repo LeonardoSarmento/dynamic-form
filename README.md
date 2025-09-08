@@ -388,7 +388,13 @@ function DynamicFormComponent() {
                 mode="single"
                 customLocale="en-US"
               />
-              <DynamicForm control={form.control} name="fileUpload" type="file-upload" />
+              <DynamicForm
+                control={control}
+                dropzone={{ multiple: true, maxFiles: 7 }}
+                reSelect={false}
+                name="fileUpload"
+                type="file-upload"
+              />
             </div>
             <div className="flex justify-center gap-x-3">
               <Button type="submit">Enviar</Button>

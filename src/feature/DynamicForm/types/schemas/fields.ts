@@ -62,6 +62,7 @@ export const FileUploadInputSchema = z.object({
   /* Array de opções para o component de file upload. */
   type: z.literal('file-upload'),
   disabled: z.boolean().optional(),
+  reSelect: z.boolean().optional(),
 });
 
 export const DateInputSchema = z.object({

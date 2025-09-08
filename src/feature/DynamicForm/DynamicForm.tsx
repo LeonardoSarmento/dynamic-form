@@ -1,6 +1,5 @@
 import { ControllerRenderProps, FieldValues, Path } from 'react-hook-form';
-import { CalendarIcon, Check, ChevronsUpDown, Paperclip } from 'lucide-react';
-import { DropzoneOptions } from 'react-dropzone';
+import { CalendarIcon, Check, ChevronsUpDown, Paperclip, Trash2, Upload } from 'lucide-react';
 import { intlFormat } from 'date-fns';
 import { cn } from './lib/utils';
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from './components/ui/form';
@@ -23,6 +22,7 @@ import { Checkbox } from './components/ui/checkbox';
 import { Calendar } from './components/ui/calendar';
 import { Button } from './components/ui/button';
 import { Switch } from './components/ui/switch';
+import { ScrollArea } from './components/ui/scroll-area';
 import { DynamicFormType } from './types/DynamicFormType';
 import { applyCNPJMask } from './types/schemas/CNPJ';
 import { applyPhoneMask } from './types/schemas/Phone';
@@ -33,42 +33,8 @@ import { BaseInputT } from './types/formField';
 import { HyperlinkInput } from './components/extensions/hyperlink';
 import { applyCurrencyMask } from './types/schemas/Currency';
 import { HierarchicalCheckbox } from './components/extensions/hierarchical-checkbox';
-import { memo, useCallback } from 'react';
-
-const FileSvgDraw = memo(() => (
-  <>
-    <svg
-      className="mb-3 h-8 w-8 text-gray-500 dark:text-gray-400"
-      aria-hidden="true"
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 20 16"
-    >
-      <path
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="2"
-        d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-      />
-    </svg>
-    <p className="mb-1 text-sm text-gray-500 dark:text-gray-400">
-      <span className="font-semibold">Arraste seu arquivo</span> ou clique para selecionar
-    </p>
-    <p className="text-xs text-gray-500 dark:text-gray-400">formato permitido: .CSV</p>
-  </>
-));
-
-const dropzone = {
-  accept: {
-    'image/*': ['.jpg', '.jpeg', '.png'],
-    'text/csv': ['.csv'],
-    'application/vnd.ms-excel': ['.csv'],
-  },
-  multiple: false,
-  maxFiles: 5,
-  maxSize: 20 * 1024 * 1024,
-} satisfies DropzoneOptions;
+import { useCallback } from 'react';
+import { TooltipComponentProvider } from './components/ui/tooltip';
 
 export default function DynamicForm<TFieldValues extends FieldValues>({
   hint,
@@ -80,9 +46,15 @@ export default function DynamicForm<TFieldValues extends FieldValues>({
       name={props.name}
       render={({ field }) => (
         <FormItem className={cn('flex flex-col space-y-0.5', props.classnameitem)}>
-          {props.hidelabel ? null : <FormLabel className={cn("mb-1", props.type === 'checkbox' && 'text-center', props.classnamelabel)}>{props.label}</FormLabel>}
+          {props.hidelabel ? null : (
+            <FormLabel className={cn('mb-1', props.type === 'checkbox' && 'text-center', props.classnamelabel)}>
+              {props.label}
+            </FormLabel>
+          )}
           {DynamicComponent({ field, hint, ...props })}
-          {props.hidedescription ? null : <FormDescription className={props.classnamedescription}>{props.description}</FormDescription>}
+          {props.hidedescription ? null : (
+            <FormDescription className={props.classnamedescription}>{props.description}</FormDescription>
+          )}
           {props.hideerrormessage ? null : <FormMessage className={props.classnamemessage} />}
         </FormItem>
       )}
@@ -272,7 +244,7 @@ function DynamicComponent<TFieldValues extends FieldValues>({
               name={props.name}
               render={({ field }) => {
                 return (
-                  <FormItem key={item.id} className="flex flex-row mx-auto items-center space-y-0 space-x-3">
+                  <FormItem key={item.id} className="mx-auto flex flex-row items-center space-y-0 space-x-3">
                     <FormControl>
                       <Checkbox
                         {...checkboxRest}
@@ -378,27 +350,56 @@ function DynamicComponent<TFieldValues extends FieldValues>({
           <FileUploader
             value={props.field.value}
             onValueChange={props.field.onChange}
-            dropzoneOptions={{ ...dropzone, ...props.dropzone }}
-            reSelect={true}
+            dropzoneOptions={props.dropzone}
+            reSelect={props.reSelect}
             className={props.className}
           >
             <FileInput
               {...props}
-              className={cn('hover:border-primary border p-2', props.disabled ? 'opacity-40' : 'opacity-100')}
+              className={cn(
+                'hover:border-primary flex flex-col items-center justify-center rounded-md border-2 border-dashed p-6 transition-colors',
+                props.disabled && 'cursor-not-allowed opacity-40',
+              )}
             >
-              <div className="flex w-full flex-col items-center justify-center pt-3 pb-4">
-                <FileSvgDraw />
-              </div>
+              <Upload className="text-muted-foreground h-8 w-8" />
+              <span className="text-muted-foreground mt-2 text-sm">Arraste arquivos ou clique para selecionar</span>
             </FileInput>
             {props.field.value && props.field.value.length > 0 && (
-              <FileUploaderContent>
-                {props.field.value.map((file: File, i: number) => (
-                  <FileUploaderItem key={i} index={i}>
-                    <Paperclip className="h-4 w-4 stroke-current" />
-                    <span>{file.name}</span>
-                  </FileUploaderItem>
-                ))}
-              </FileUploaderContent>
+              <div className="mt-1 space-y-1">
+                <ScrollArea className="h-32 max-w-full min-w-fit rounded-md border p-2">
+                  <FileUploaderContent>
+                    {props.field.value.map((file: File, i: number) => (
+                      <TooltipComponentProvider key={i} tooltipContent={file.name}>
+                        <FileUploaderItem index={i}>
+                          {file.type.startsWith('image/') ? (
+                            <img
+                              src={URL.createObjectURL(file)}
+                              alt={file.name}
+                              className="size-6 rounded object-cover"
+                            />
+                          ) : (
+                            <Paperclip className="size-4 stroke-current" />
+                          )}
+                          <span className="max-w-2xs truncate text-sm">{file.name}</span>
+                        </FileUploaderItem>
+                      </TooltipComponentProvider>
+                    ))}
+                  </FileUploaderContent>
+                </ScrollArea>
+
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => props.field.onChange([])}
+                  className="flex items-center gap-1"
+                >
+                  <span className="text-muted-foreground hover:text-destructive cursor-pointer transition-colors">
+                    <Trash2 className="size-4" />
+                  </span>
+                  Remover todos
+                </Button>
+              </div>
             )}
           </FileUploader>
         </>

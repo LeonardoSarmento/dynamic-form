@@ -304,8 +304,16 @@ function createCards(control: Control<DynamicSchemaTestingComponentType>): FormC
       description: 'Seleciona uma data única usando um calendário interativo.',
     },
     {
-      title: 'Upload de Arquivo',
-      content: <DynamicForm control={control} name="fileUpload" type="file-upload" />,
+      title: 'Upload de Arquivos',
+      content: (
+        <DynamicForm
+          control={control}
+          dropzone={{ multiple: true, maxFiles: 7 }}
+          reSelect={false}
+          name="fileUpload"
+          type="file-upload"
+        />
+      ),
       description: 'Permite selecionar e enviar arquivos para o sistema.',
     },
   ];
