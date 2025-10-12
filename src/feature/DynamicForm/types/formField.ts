@@ -16,6 +16,7 @@ import { CalendarProps } from '../components/ui/calendar';
 import { ButtonProps } from '../components/ui/button';
 import { InputProps } from '../components/ui/input';
 import { HierarchicalCheckboxProps } from '../components/extensions/hierarchical-checkbox';
+import { SmartDatetimeInputProps } from '../components/extensions/smart-datetime-input';
 
 export type BaseInputT = z.infer<typeof baseInputSchema>;
 
@@ -34,6 +35,10 @@ type TextAreaT = {
 type DateT = {
   type: 'date';
 } & CalendarProps;
+
+type SmartDateTimeT = {
+  type: 'datetime-input';
+} & SmartDatetimeInputProps;
 
 type HierarchicalT = {
   type: 'hierarchical';
@@ -89,6 +94,7 @@ export type ExtendedFormProps =
   | NumberT
   | TextAreaT
   | DateT
+  | SmartDateTimeT
   | SelectT
   | SwitchT
   | MultiSelectT

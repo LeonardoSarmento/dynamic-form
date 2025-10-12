@@ -5,7 +5,7 @@ export const FileUploadSchema = z
     z.instanceof(File).refine((file) => file.size < 20 * 1024 * 1024, {
       message: 'Tamanho de arquivo deve ser no máximo 20MB.',
     }),
-    { required_error: 'Deve ser enviado pelo menos um arquivo.' },
+    { error: 'Deve ser enviado pelo menos um arquivo.' },
   )
   .min(1, { message: 'Arquivo é obrigatório.' })
   .max(5, {

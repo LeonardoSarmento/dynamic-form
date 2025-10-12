@@ -6,20 +6,27 @@ import { MultiSelectOptionsSchema } from './MultiSelect';
 import { RadioOptionsSchema } from './RadioGroup';
 import { SelectOptionsSchema } from './Select';
 
+const baseTypeOptionsSchema = z.enum(['input', 'password', 'number', 'hierarchical', 'textarea', 'link']);
+
+const maskSchema = z
+  .union([
+    z.literal('cnpj'),
+    z.literal('cpf'),
+    z.literal('ip'),
+    z.literal('macAddress'),
+    z.literal('phone'),
+    z.literal('currency'),
+    z.function({
+      input: z.tuple([z.string()]),
+      output: z.string(),
+    }),
+  ])
+  .optional();
+
 export const baseInputSchema = z.object({
-  type: z.enum(['input', 'password', 'number', 'hierarchical', 'textarea', 'link']),
+  type: baseTypeOptionsSchema,
   placeholder: z.string(),
-  mask: z
-    .union([
-      z.literal('cnpj'),
-      z.literal('cpf'),
-      z.literal('ip'),
-      z.literal('macAddress'),
-      z.literal('phone'),
-      z.literal('currency'),
-      z.function().args(z.string()).returns(z.string()),
-    ])
-    .optional(),
+  mask: maskSchema,
 });
 
 export const ComboboxInputSchema = z.object({
@@ -73,6 +80,12 @@ export const DateInputSchema = z.object({
   customLocale: DateLocaleSchema.optional(),
   mode: DateModeSchema,
   format: z.enum(['long', 'short']).default('long').optional(),
+});
+
+export const SmartDatetimeInputSchema = z.object({
+  /* Array de opções para o component de select. */
+  type: z.literal('datetime-input'),
+  disabled: z.tuple([z.boolean(), z.function({ input: z.tuple([z.date()]), output: z.boolean() })]).optional(),
 });
 
 export const RadioInputSchema = z.object({

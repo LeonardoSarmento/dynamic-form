@@ -14,21 +14,17 @@ import { CpfSchema } from '../DynamicForm/types/schemas/Cpf';
 import { IpSchema } from '../DynamicForm/types/schemas/Ip';
 import cnpj from '../DynamicForm/types/schemas/CNPJ';
 import { HierarchicalSchema } from './types/schemas/Hierarchical';
+import { DatetimeSchema } from './types/schemas/Datetime';
 
 export const DynamicSchemaTestingComponent = z.object({
-  input: z
-    .string({
-      required_error: 'Conteúdo é obrigatório.',
+  input: z.string('Conteúdo é obrigatório.').min(2, { message: 'Conteúdo deve ter pelo menos 2 caracteres.' }).trim(),
+  email: z
+    .email({
+      error: (iss) => (iss.input === undefined ? 'E-mail é obrigatório.' : 'E-mail inválido'),
     })
-    .min(2, { message: 'Conteúdo deve ter pelo menos 2 caracteres.' })
     .trim(),
-  email: z.string({
-    required_error: 'E-mail é obrigatório.',
-  }).email({ message: 'E-mail inválido.' }).trim(),
   link: z
-    .string({
-      required_error: 'Link é obrigatório.',
-    })
+    .string('Link é obrigatório.')
     .refine((value) => /^(https?):\/\/(?=.*\.[a-z]{2,})[^\s$.?#].[^\s]*$/i.test(value), {
       message: 'Por favor, escreva uma URL válida.',
     }),
@@ -38,7 +34,7 @@ export const DynamicSchemaTestingComponent = z.object({
   ip: IpSchema,
   cpf: CpfSchema,
   password: z
-    .string({ required_error: 'Senha é obrigatória.' })
+    .string('Senha é obrigatória.')
     .min(8, {
       message: 'Senha deve conter no mínimo 8 caracteres.',
     })
@@ -51,7 +47,7 @@ export const DynamicSchemaTestingComponent = z.object({
     })
     .trim(),
   number: z
-    .number({ required_error: 'Número é obrigatório.' })
+    .number('Número é obrigatório.')
     .int()
     .positive()
     .min(1, 'Valor mínimo de 1.')
@@ -66,6 +62,7 @@ export const DynamicSchemaTestingComponent = z.object({
   textarea: TextareaSchema,
   fileUpload: FileUploadSchema,
   date: DateSchema,
+  datetime: DatetimeSchema,
   rangeDate: DateRangeSchema,
 });
 export type DynamicSchemaTestingComponentType = z.infer<typeof DynamicSchemaTestingComponent>;

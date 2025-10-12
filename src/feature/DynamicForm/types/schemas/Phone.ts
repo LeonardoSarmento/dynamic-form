@@ -21,7 +21,7 @@ export const applyPhoneMask = (value: string) => {
 };
 
 export const PhoneSchema = z
-  .string({ required_error: 'Telefone é obrigatório' })
+  .string('Telefone é obrigatório')
   .min(1, { message: 'Telefone não pode ser vazio' })
   .transform((val) => applyPhoneMask(val)) // Aplica a máscara
   .refine(

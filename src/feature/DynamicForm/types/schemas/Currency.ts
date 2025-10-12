@@ -21,6 +21,6 @@ export const applyCurrencyMask = (value: string) => {
 };
 
 export const CurrencySchema = z
-  .string({ required_error: 'Valor é obrigatório' })
+  .string('Valor é obrigatório')
   .min(1, { message: 'Valor não pode ser vazio' })
   .transform((val) => applyCurrencyMask(val));

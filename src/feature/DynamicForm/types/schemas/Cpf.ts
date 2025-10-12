@@ -43,7 +43,7 @@ function isValidCPF(cpf: string): boolean {
 }
 
 export const CpfSchema = z
-  .string({ required_error: 'Cpf é obrigatório' })
+  .string('Cpf é obrigatório')
   .min(1, { message: 'CPF não pode ser vazio' })
   .regex(CPF_REGEX, 'Formato inválido para CPF. Formato esperado: XXX.XXX.XXX-XX')
   .refine((cpf) => isValidCPF(cpf), {

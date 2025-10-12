@@ -35,6 +35,7 @@ import { applyCurrencyMask } from './types/schemas/Currency';
 import { HierarchicalCheckbox } from './components/extensions/hierarchical-checkbox';
 import { useCallback } from 'react';
 import { TooltipComponentProvider } from './components/ui/tooltip';
+import { SmartDatetimeInput } from './components/extensions/smart-datetime-input';
 
 export default function DynamicForm<TFieldValues extends FieldValues>({
   hint,
@@ -177,6 +178,33 @@ function DynamicComponent<TFieldValues extends FieldValues>({
           </Popover>
         </>
       );
+    case 'datetime-input': {
+      return (
+        <>
+          <FormControl>
+            <SmartDatetimeInput
+              {...props}
+              {...props.field}
+              onValueChange={props.field.onChange}
+              disabled={(time: Date) => {
+                const now = new Date();
+                const isToday =
+                  time.getFullYear() === now.getFullYear() &&
+                  time.getMonth() === now.getMonth() &&
+                  time.getDate() === now.getDate();
+                return isToday && time.getHours() >= 14;
+              }}
+              // Desabilita datas a partir de amanhã
+              disabledDates={(date: Date) => {
+                const today = new Date();
+                today.setHours(0, 0, 0, 0); // zera horário
+                return date > today;
+              }}
+            />
+          </FormControl>
+        </>
+      );
+    }
     case 'switch': {
       const { type, ...switchRest } = props;
       return (
@@ -296,7 +324,7 @@ function DynamicComponent<TFieldValues extends FieldValues>({
       const { type, handlecustomselect, ...comboboxRest } = props;
       return (
         <>
-          <Popover>
+          <Popover modal={false}>
             <PopoverTrigger asChild>
               <FormControl>
                 <Button
@@ -433,6 +461,7 @@ function DynamicComponent<TFieldValues extends FieldValues>({
         </>
       );
     }
+
     default: {
       const { mask, ...inputRest } = props;
       return (

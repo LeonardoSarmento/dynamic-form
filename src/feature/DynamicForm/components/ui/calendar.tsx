@@ -34,7 +34,7 @@ function Calendar({
   showOutsideDays = true,
   yearRange = 12,
   numberOfMonths,
-  customLocale = DateLocaleSchema.Enum['pt-BR'],
+  customLocale = DateLocaleSchema.enum['pt-BR'],
   customMode = 'single',
   ...props
 }: CalendarProps & { customLocale?: DateLocaleType; customMode?: ModeSchemaType }) {
@@ -199,7 +199,7 @@ function Calendar({
         },
         CaptionLabel: ({ children }) => (
           <Button
-            className="h-7 w-full truncate text-sm font-medium"
+            className="h-7 w-full capitalize truncate text-sm font-medium"
             variant="ghost"
             size="sm"
             onClick={() => setNavView((prev) => (prev === 'days' ? 'years' : 'days'))}

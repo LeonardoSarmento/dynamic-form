@@ -1,8 +1,6 @@
 import { z } from 'zod';
 
-export const ComboboxSchema = z.string({
-  required_error: 'Por favor selecione uma opção.',
-});
+export const ComboboxSchema = z.string('Por favor selecione uma opção.');
 export type ComboboxType = z.infer<typeof ComboboxSchema>;
 
 export const ComboboxOptionsSchema = z

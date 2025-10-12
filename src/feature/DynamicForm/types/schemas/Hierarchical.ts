@@ -19,11 +19,7 @@ export const HierarchicalOptionSchema: z.ZodType<HierarchicalOption> = z.lazy(()
 export type HierarchicalOptionType = z.infer<typeof HierarchicalOptionSchema>;
 
 export const HierarchicalSchema = z
-  .array(
-    z.string({
-      required_error: 'Por favor selecione uma opção.',
-    }),
-  )
+  .array(z.string('Por favor selecione uma opção.'))
   .refine((values) => values.length >= 1, {
     message: 'É preciso selecionar pelo menos uma opção.',
   })

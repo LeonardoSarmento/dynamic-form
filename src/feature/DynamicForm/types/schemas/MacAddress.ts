@@ -15,7 +15,7 @@ export const applyMacAddressMask = (value: string): string => {
 };
 
 export const MacAddress = z
-  .string({ required_error: 'MAC Address é obrigatório' })
+  .string('MAC Address é obrigatório')
   .min(1, { message: 'MAC Address não pode ser vazio' })
   .regex(MAC_ADDRESS_REGEX, { message: 'Formato inválido de MAC Address' });
 

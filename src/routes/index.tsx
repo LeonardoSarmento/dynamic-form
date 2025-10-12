@@ -304,6 +304,11 @@ function createCards(control: Control<DynamicSchemaTestingComponentType>): FormC
       description: 'Seleciona uma data única usando um calendário interativo.',
     },
     {
+      title: 'Data e hora inteligente',
+      content: <DynamicForm control={control} label="Data e hora" name="datetime" type="datetime-input" />,
+      description: 'Seleciona uma data única usando um calendário interativo ou escreva no input.',
+    },
+    {
       title: 'Upload de Arquivos',
       content: (
         <DynamicForm
@@ -358,6 +363,7 @@ function ComponentsComponent() {
       textarea: '',
       macAddress: '',
       date: undefined,
+      datetime: undefined,
       rangeDate: undefined,
       combobox: undefined,
       radio: undefined,
