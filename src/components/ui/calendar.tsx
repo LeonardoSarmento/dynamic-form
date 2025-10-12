@@ -30,7 +30,7 @@ function Calendar({
   showOutsideDays = true,
   yearRange = 12,
   numberOfMonths,
-  customLocale = DateLocaleSchema.Enum['pt-BR'],
+  customLocale = DateLocaleSchema.enum['pt-BR'],
   customMode = 'single',
   ...props
 }: CalendarProps & { customLocale?: DateLocaleType; customMode?: ModeSchemaType }) {
