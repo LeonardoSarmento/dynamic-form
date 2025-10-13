@@ -15,6 +15,7 @@ import { IpSchema } from '../DynamicForm/types/schemas/Ip';
 import cnpj from '../DynamicForm/types/schemas/CNPJ';
 import { HierarchicalSchema } from './types/schemas/Hierarchical';
 import { DatetimeSchema } from './types/schemas/Datetime';
+import { SliderSchema } from './types/schemas/Slider';
 
 export const DynamicSchemaTestingComponent = z.object({
   input: z.string('Conteúdo é obrigatório.').min(2, { message: 'Conteúdo deve ter pelo menos 2 caracteres.' }).trim(),
@@ -55,6 +56,8 @@ export const DynamicSchemaTestingComponent = z.object({
   checkbox: CheckboxSchema,
   combobox: ComboboxSchema,
   select: SelectSchema,
+  slider: SliderSchema,
+  sliderDouble: SliderSchema,
   multiSelect: MultiSelectSchema,
   hierarchical: HierarchicalSchema,
   radio: RadioSchema,

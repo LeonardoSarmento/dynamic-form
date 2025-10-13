@@ -36,6 +36,7 @@ import { HierarchicalCheckbox } from './components/extensions/hierarchical-check
 import { useCallback } from 'react';
 import { TooltipComponentProvider } from './components/ui/tooltip';
 import { SmartDatetimeInput } from './components/extensions/smart-datetime-input';
+import { Slider } from './components/ui/slider';
 
 export default function DynamicForm<TFieldValues extends FieldValues>({
   hint,
@@ -127,138 +128,152 @@ function DynamicComponent<TFieldValues extends FieldValues>({
       );
     case 'date':
       return (
-        <>
-          <Popover>
-            <PopoverTrigger asChild disabled={props.disabledInput}>
-              <FormControl>
-                <Button
-                  variant={'outline'}
-                  className={cn(
-                    'w-full pl-3 text-left font-normal',
-                    props.mode === 'single'
-                      ? !props.field.value && 'text-muted-foreground'
-                      : !props.field.value?.from && !props.field.value?.to && 'text-muted-foreground',
-                    props.className,
-                  )}
-                >
-                  {props.mode === 'single' ? (
-                    props.field.value ? (
-                      dateFormatter(props.field.value)
-                    ) : (
-                      <span>{props.placeholder ?? 'Escolha uma data'}</span>
-                    )
-                  ) : props.field.value?.from ? (
-                    props.field.value.to ? (
-                      `${dateFormatter(props.field.value.from)} - ${dateFormatter(props.field.value.to)}`
-                    ) : (
-                      dateFormatter(props.field.value.from)
-                    )
+        <Popover>
+          <PopoverTrigger asChild disabled={props.disabledInput}>
+            <FormControl>
+              <Button
+                variant={'outline'}
+                className={cn(
+                  'w-full pl-3 text-left font-normal',
+                  props.mode === 'single'
+                    ? !props.field.value && 'text-muted-foreground'
+                    : !props.field.value?.from && !props.field.value?.to && 'text-muted-foreground',
+                  props.className,
+                )}
+              >
+                {props.mode === 'single' ? (
+                  props.field.value ? (
+                    dateFormatter(props.field.value)
                   ) : (
-                    <span>{props.placeholder ?? 'Escolha um período'}</span>
-                  )}
-                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                </Button>
-              </FormControl>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
-              <Calendar
-                {...props}
-                autoFocus
-                customMode={props.mode || 'single'}
-                customLocale={props.customLocale || 'pt-BR'}
-                selected={props.field.value}
-                numberOfMonths={props.mode === 'range' ? 2 : 1}
-                disabled={{
-                  after: new Date(),
-                  ...(typeof props.disabled === 'object' && props.disabled ? props.disabled : {}),
-                }}
-                onSelect={props.field.onChange}
-              />
-            </PopoverContent>
-          </Popover>
-        </>
+                    <span>{props.placeholder ?? 'Escolha uma data'}</span>
+                  )
+                ) : props.field.value?.from ? (
+                  props.field.value.to ? (
+                    `${dateFormatter(props.field.value.from)} - ${dateFormatter(props.field.value.to)}`
+                  ) : (
+                    dateFormatter(props.field.value.from)
+                  )
+                ) : (
+                  <span>{props.placeholder ?? 'Escolha um período'}</span>
+                )}
+                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+              </Button>
+            </FormControl>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="start">
+            <Calendar
+              {...props}
+              autoFocus
+              customMode={props.mode || 'single'}
+              customLocale={props.customLocale || 'pt-BR'}
+              selected={props.field.value}
+              numberOfMonths={props.mode === 'range' ? 2 : 1}
+              disabled={{
+                after: new Date(),
+                ...(typeof props.disabled === 'object' && props.disabled ? props.disabled : {}),
+              }}
+              onSelect={props.field.onChange}
+            />
+          </PopoverContent>
+        </Popover>
       );
     case 'datetime-input': {
       return (
-        <>
+        <FormControl>
+          <SmartDatetimeInput {...props} {...props.field} onValueChange={props.field.onChange} />
+        </FormControl>
+      );
+    }
+    case 'slider': {
+      const value = props.field.value ?? [0];
+      const isRange = value.length === 2;
+      return (
+        <div className="flex w-full min-w-40 flex-col gap-2">
+          {isRange ? (
+            <div className="flex items-center justify-between text-sm">
+              <div className="flex flex-col">
+                <FormLabel htmlFor={props.name}>{props.titles?.[0]}</FormLabel>
+                <span className="text-muted-foreground space-x-1">
+                  {value[0]} {props.unit}
+                </span>
+              </div>
+              <div className="flex flex-col items-end">
+                <FormLabel htmlFor={props.name}>{props.titles?.[1]}</FormLabel>
+                <span className="text-muted-foreground space-x-1">
+                  {value[1]} {props.unit}
+                </span>
+              </div>
+            </div>
+          ) : (
+            <div className="flex items-center justify-between">
+              <FormLabel htmlFor={props.name}>{props.titles?.[0]}</FormLabel>
+              <span className="text-muted-foreground space-x-1 text-sm">
+                {value[0]} {props.unit}
+              </span>
+            </div>
+          )}
           <FormControl>
-            <SmartDatetimeInput
+            <Slider
               {...props}
-              {...props.field}
+              defaultValue={props.field.value}
               onValueChange={props.field.onChange}
-              disabled={(time: Date) => {
-                const now = new Date();
-                const isToday =
-                  time.getFullYear() === now.getFullYear() &&
-                  time.getMonth() === now.getMonth() &&
-                  time.getDate() === now.getDate();
-                return isToday && time.getHours() >= 14;
-              }}
-              // Desabilita datas a partir de amanhã
-              disabledDates={(date: Date) => {
-                const today = new Date();
-                today.setHours(0, 0, 0, 0); // zera horário
-                return date > today;
-              }}
+              max={props.max ?? 100}
+              min={props.min ?? 0}
+              step={props.step ?? 1}
+              className={cn('flex w-full', props.className)}
             />
           </FormControl>
-        </>
+        </div>
       );
     }
     case 'switch': {
       const { type, ...switchRest } = props;
       return (
-        <>
-          <FormControl>
-            <Switch {...switchRest} checked={props.field.value} onCheckedChange={props.field.onChange} aria-readonly />
-          </FormControl>
-        </>
+        <FormControl>
+          <Switch {...switchRest} checked={props.field.value} onCheckedChange={props.field.onChange} />
+        </FormControl>
       );
     }
     case 'select': {
       const { type, ...selectRest } = props;
       return (
-        <>
-          <Select onValueChange={props.field.onChange} defaultValue={props.field.value}>
-            <FormControl>
-              <SelectTrigger {...selectRest}>
-                <SelectValue placeholder={props.placeholder ?? 'Selecione uma das opções'} />
-              </SelectTrigger>
-            </FormControl>
-            <SelectContent>
-              {props.selectoptions?.map((item) => (
-                <SelectItem key={item.id} value={item.id} disabled={item.disabled}>
-                  {item.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </>
+        <Select onValueChange={props.field.onChange} defaultValue={props.field.value}>
+          <FormControl>
+            <SelectTrigger {...selectRest}>
+              <SelectValue placeholder={props.placeholder ?? 'Selecione uma das opções'} />
+            </SelectTrigger>
+          </FormControl>
+          <SelectContent>
+            {props.selectoptions?.map((item) => (
+              <SelectItem key={item.id} value={item.id} disabled={item.disabled}>
+                {item.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       );
     }
     case 'multi-select': {
       const { type, disabledTrigger, itensShown, ...multiSelectRest } = props;
       return (
-        <>
-          <MultiSelector onValuesChange={props.field.onChange} values={props.field.value}>
-            <MultiSelectorTrigger
-              disabledTrigger={disabledTrigger || props.disabled}
-              placeholder={props.placeholder ?? 'Selecione suas opções'}
-              itemsShown={itensShown}
-              itemscount={props.multiselectoptions.filter((item) => !item.disabled).length}
-            />
-            <MultiSelectorContent>
-              <MultiSelectorInput {...multiSelectRest} />
-              <MultiSelectorList itemsCount={props.multiselectoptions.length}>
-                {props.multiselectoptions?.map((item) => (
-                  <MultiSelectorItem key={item.id} value={item.label} disabled={item.disabled}>
-                    <span>{item.label}</span>
-                  </MultiSelectorItem>
-                ))}
-              </MultiSelectorList>
-            </MultiSelectorContent>
-          </MultiSelector>
-        </>
+        <MultiSelector onValuesChange={props.field.onChange} values={props.field.value}>
+          <MultiSelectorTrigger
+            disabledTrigger={disabledTrigger || props.disabled}
+            placeholder={props.placeholder ?? 'Selecione suas opções'}
+            itemsShown={itensShown}
+            itemscount={props.multiselectoptions.filter((item) => !item.disabled).length}
+          />
+          <MultiSelectorContent>
+            <MultiSelectorInput {...multiSelectRest} />
+            <MultiSelectorList itemsCount={props.multiselectoptions.length}>
+              {props.multiselectoptions?.map((item) => (
+                <MultiSelectorItem key={item.id} value={item.label} disabled={item.disabled}>
+                  <span>{item.label}</span>
+                </MultiSelectorItem>
+              ))}
+            </MultiSelectorList>
+          </MultiSelectorContent>
+        </MultiSelector>
       );
     }
     case 'checkbox': {
@@ -298,184 +313,172 @@ function DynamicComponent<TFieldValues extends FieldValues>({
     }
     case 'radio':
       return (
-        <>
-          <FormControl>
-            <RadioGroup
-              {...props}
-              onValueChange={props.field.onChange}
-              defaultValue={props.field.value}
-              className={cn('flex flex-col space-y-1', props.className)}
-            >
-              {props.radiooptions.map((item) => (
-                <FormItem key={item.id} className="flex items-center space-y-0 space-x-3">
-                  <FormControl>
-                    <RadioGroupItem value={item.id} disabled={item.disabled} />
-                  </FormControl>
-                  <FormLabel className={`${item.disabled ? 'text-muted-foreground' : 'text-primary'} font-normal`}>
-                    {item.label}
-                  </FormLabel>
-                </FormItem>
-              ))}
-            </RadioGroup>
-          </FormControl>
-        </>
+        <FormControl>
+          <RadioGroup
+            {...props}
+            onValueChange={props.field.onChange}
+            defaultValue={props.field.value}
+            className={cn('flex flex-col space-y-1', props.className)}
+          >
+            {props.radiooptions.map((item) => (
+              <FormItem key={item.id} className="flex items-center space-y-0 space-x-3">
+                <FormControl>
+                  <RadioGroupItem value={item.id} disabled={item.disabled} />
+                </FormControl>
+                <FormLabel className={`${item.disabled ? 'text-muted-foreground' : 'text-primary'} font-normal`}>
+                  {item.label}
+                </FormLabel>
+              </FormItem>
+            ))}
+          </RadioGroup>
+        </FormControl>
       );
     case 'combobox': {
       const { type, handlecustomselect, ...comboboxRest } = props;
       return (
-        <>
-          <Popover modal={false}>
-            <PopoverTrigger asChild>
-              <FormControl>
-                <Button
-                  {...comboboxRest}
-                  variant="outline"
-                  role="combobox"
-                  className={cn(
-                    `h-9 justify-between text-sm ${!props.field.value && 'text-muted-foreground font-normal'}`,
-                    props.className,
-                  )}
-                >
-                  {props.field.value
-                    ? props.comboboxoptions.find((item) => item.id === props.field.value)?.label
-                    : (props.placeholder ?? 'Selecione uma opção')}
-                  <ChevronsUpDown className="opacity-50" />
-                </Button>
-              </FormControl>
-            </PopoverTrigger>
-            <PopoverContent className="p-0">
-              <Command>
-                <CommandInput placeholder="Procure aqui" className="h-9" />
-                <CommandList>
-                  <CommandEmpty>{props.optionsnotfoundtext ?? 'Opção não encontrada'}</CommandEmpty>
-                  <CommandGroup>
-                    {props.comboboxoptions.map((item) => (
-                      <CommandItem
-                        key={item.id}
-                        value={item.label}
-                        disabled={item.disabled}
-                        className={props.classNameCommandItem}
-                        onSelect={(value) => {
-                          handlecustomselect?.(value);
-                          props.field.onChange(item.id);
-                        }}
-                      >
-                        {item.label}
-                        <Check className={cn('ml-auto', item.id === props.field.value ? 'opacity-100' : 'opacity-0')} />
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
-                </CommandList>
-              </Command>
-            </PopoverContent>
-          </Popover>
-        </>
+        <Popover modal={false}>
+          <PopoverTrigger asChild>
+            <FormControl>
+              <Button
+                {...comboboxRest}
+                variant="outline"
+                role="combobox"
+                className={cn(
+                  `h-9 justify-between text-sm ${!props.field.value && 'text-muted-foreground font-normal'}`,
+                  props.className,
+                )}
+              >
+                {props.field.value
+                  ? props.comboboxoptions.find((item) => item.id === props.field.value)?.label
+                  : (props.placeholder ?? 'Selecione uma opção')}
+                <ChevronsUpDown className="opacity-50" />
+              </Button>
+            </FormControl>
+          </PopoverTrigger>
+          <PopoverContent className="p-0">
+            <Command>
+              <CommandInput placeholder="Procure aqui" className="h-9" />
+              <CommandList>
+                <CommandEmpty>{props.optionsnotfoundtext ?? 'Opção não encontrada'}</CommandEmpty>
+                <CommandGroup>
+                  {props.comboboxoptions.map((item) => (
+                    <CommandItem
+                      key={item.id}
+                      value={item.label}
+                      disabled={item.disabled}
+                      className={props.classNameCommandItem}
+                      onSelect={(value) => {
+                        handlecustomselect?.(value);
+                        props.field.onChange(item.id);
+                      }}
+                    >
+                      {item.label}
+                      <Check className={cn('ml-auto', item.id === props.field.value ? 'opacity-100' : 'opacity-0')} />
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              </CommandList>
+            </Command>
+          </PopoverContent>
+        </Popover>
       );
     }
     case 'file-upload':
       const { reSelect, ...rest } = props;
       return (
-        <>
-          <FileUploader
-            value={props.field.value}
-            onValueChange={props.field.onChange}
-            dropzoneOptions={props.dropzone}
-            reSelect={reSelect}
-            className={props.className}
-          >
-            <FileInput
-              {...rest}
-              className={cn(
-                'hover:border-primary flex flex-col items-center justify-center rounded-md border-2 border-dashed p-6 transition-colors',
-                props.disabled && 'cursor-not-allowed opacity-40',
-              )}
-            >
-              <Upload className="text-muted-foreground h-8 w-8" />
-              <span className="text-muted-foreground mt-2 text-sm">Arraste arquivos ou clique para selecionar</span>
-            </FileInput>
-            {props.field.value && props.field.value.length > 0 && (
-              <div className="mt-1 space-y-1">
-                <ScrollArea
-                  className={cn(
-                    'max-h-32 max-w-full min-w-fit rounded-md border p-2',
-                    `h-[${props.field.value.length * 9}px] overflow-y-auto`,
-                  )}
-                >
-                  <FileUploaderContent>
-                    {props.field.value.map((file: File, i: number) => (
-                      <TooltipComponentProvider key={i} tooltipContent={file.name}>
-                        <FileUploaderItem index={i}>
-                          {file.type.startsWith('image/') ? (
-                            <img
-                              src={URL.createObjectURL(file)}
-                              alt={file.name}
-                              className="size-6 rounded object-cover"
-                            />
-                          ) : (
-                            <Paperclip className="size-4 stroke-current" />
-                          )}
-                          <span className="max-w-2xs truncate text-sm">{file.name}</span>
-                        </FileUploaderItem>
-                      </TooltipComponentProvider>
-                    ))}
-                  </FileUploaderContent>
-                </ScrollArea>
-
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => props.field.onChange([])}
-                  className="flex items-center gap-1"
-                >
-                  <span className="text-muted-foreground hover:text-destructive cursor-pointer transition-colors">
-                    <Trash2 className="size-4" />
-                  </span>
-                  Remover todos
-                </Button>
-              </div>
+        <FileUploader
+          value={props.field.value}
+          onValueChange={props.field.onChange}
+          dropzoneOptions={props.dropzone}
+          reSelect={reSelect}
+          className={props.className}
+        >
+          <FileInput
+            {...rest}
+            className={cn(
+              'hover:border-primary flex flex-col items-center justify-center rounded-md border-2 border-dashed p-6 transition-colors',
+              props.disabled && 'cursor-not-allowed opacity-40',
             )}
-          </FileUploader>
-        </>
+          >
+            <Upload className="text-muted-foreground h-8 w-8" />
+            <span className="text-muted-foreground mt-2 text-sm">Arraste arquivos ou clique para selecionar</span>
+          </FileInput>
+          {props.field.value && props.field.value.length > 0 && (
+            <div className="mt-1 space-y-1">
+              <ScrollArea
+                className={cn(
+                  'max-h-32 max-w-full min-w-fit rounded-md border p-2',
+                  `h-[${props.field.value.length * 9}px] overflow-y-auto`,
+                )}
+              >
+                <FileUploaderContent>
+                  {props.field.value.map((file: File, i: number) => (
+                    <TooltipComponentProvider key={i} tooltipContent={file.name}>
+                      <FileUploaderItem index={i}>
+                        {file.type.startsWith('image/') ? (
+                          <img
+                            src={URL.createObjectURL(file)}
+                            alt={file.name}
+                            className="size-6 rounded object-cover"
+                          />
+                        ) : (
+                          <Paperclip className="size-4 stroke-current" />
+                        )}
+                        <span className="max-w-2xs truncate text-sm">{file.name}</span>
+                      </FileUploaderItem>
+                    </TooltipComponentProvider>
+                  ))}
+                </FileUploaderContent>
+              </ScrollArea>
+
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => props.field.onChange([])}
+                className="flex items-center gap-1"
+              >
+                <span className="text-muted-foreground hover:text-destructive cursor-pointer transition-colors">
+                  <Trash2 className="size-4" />
+                </span>
+                Remover todos
+              </Button>
+            </div>
+          )}
+        </FileUploader>
       );
     case 'link': {
       const { mask, ...linkRest } = props;
       return (
-        <>
-          <FormControl>
-            <HyperlinkInput
-              {...linkRest}
-              onChange={(e) => props.field.onChange(maskInput(props.mask, e.target.value))}
-              hint={hint}
-            />
-          </FormControl>
-        </>
+        <FormControl>
+          <HyperlinkInput
+            {...linkRest}
+            onChange={(e) => props.field.onChange(maskInput(props.mask, e.target.value))}
+            hint={hint}
+          />
+        </FormControl>
       );
     }
     case 'hierarchical': {
       return (
-        <>
-          <FormControl>
-            <HierarchicalCheckbox {...props} {...props.field} />
-          </FormControl>
-        </>
+        <FormControl>
+          <HierarchicalCheckbox {...props} {...props.field} />
+        </FormControl>
       );
     }
 
     default: {
       const { mask, ...inputRest } = props;
       return (
-        <>
-          <FormControl>
-            <Input
-              {...inputRest}
-              {...inputRest.field}
-              maxLength={mask === 'phone' ? 15 : undefined}
-              onChange={(e) => props.field.onChange(maskInput(props.mask, e.target.value))}
-              hint={hint}
-            />
-          </FormControl>
-        </>
+        <FormControl>
+          <Input
+            {...inputRest}
+            {...inputRest.field}
+            maxLength={mask === 'phone' ? 15 : undefined}
+            onChange={(e) => props.field.onChange(maskInput(props.mask, e.target.value))}
+            hint={hint}
+          />
+        </FormControl>
       );
     }
   }

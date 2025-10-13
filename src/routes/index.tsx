@@ -15,6 +15,14 @@ import React from 'react';
 import { Muted } from '@components/typography/muted';
 import { Icons } from '@components/icons/icon';
 import PWABadge from '@components/pwa/PWABadge';
+import {
+  CHECKBOX_OPTIONS,
+  HIERARCHICAL_OPTIONS,
+  COMBOBOX_OPTIONS,
+  RADIO_OPTIONS,
+  SELECT_OPTIONS,
+  MULTISELECT_OPTIONS,
+} from '@services/constants';
 
 export const Route = createFileRoute('/')({
   component: ComponentsComponent,
@@ -126,11 +134,7 @@ function createCards(control: Control<DynamicSchemaTestingComponentType>): FormC
           name="checkbox"
           type="checkbox"
           label="Escolha opções"
-          checkboxoptions={[
-            { id: 'opcao1', label: 'Opção 1' },
-            { id: 'opcao2', label: 'Opção 2', disabled: true },
-            { id: 'opcao3', label: 'Opção 3' },
-          ]}
+          checkboxoptions={CHECKBOX_OPTIONS}
         />
       ),
       description: 'Permite selecionar uma ou mais opções de forma independente.',
@@ -145,47 +149,7 @@ function createCards(control: Control<DynamicSchemaTestingComponentType>): FormC
           label="Seleção Hierárquica"
           placeholder="Selecione uma opção"
           maxSelected={3}
-          options={[
-            { id: 'opcao1', label: 'Opção 1' },
-            {
-              id: 'opcao2',
-              label: 'Opção 2',
-              children: [
-                { id: 'opcao2.1', label: 'Opção 2.1' },
-                { id: 'opcao2.2', label: 'Opção 2.2' },
-                { id: 'opcao2.3', label: 'Opção 2.3', disabled: true },
-              ],
-            },
-            {
-              id: 'opcao3',
-              label: 'Opção 3',
-              children: [
-                { id: 'opcao3.1', label: 'Opção 3.1' },
-                { id: 'opcao3.2', label: 'Opção 3.2' },
-                { id: 'opcao3.3', label: 'Opção 3.3', disabled: true },
-                {
-                  id: 'opcao3.4',
-                  label: 'Opção 3.4',
-                  children: [
-                    { id: 'opcao3.4.1', label: 'Opção 3.4.1', disabled: true },
-                    { id: 'opcao3.4.2', label: 'Opção 3.4.2' },
-                    { id: 'opcao3.4.3', label: 'Opção 3.4.3' },
-                  ],
-                },
-              ],
-            },
-            {
-              id: 'opcao4',
-              label: 'Opção 4',
-              disabled: true,
-              children: [
-                { id: 'opcao4.1', label: 'Opção 4.1' },
-                { id: 'opcao4.2', label: 'Opção 4.2' },
-                { id: 'opcao4.3', label: 'Opção 4.3', disabled: true },
-                { id: 'opcao4.4', label: 'Opção 4.4' },
-              ],
-            },
-          ]}
+          options={HIERARCHICAL_OPTIONS}
         />
       ),
       description: 'Seleção de opções organizadas hierarquicamente, permitindo escolher múltiplos níveis.',
@@ -198,11 +162,7 @@ function createCards(control: Control<DynamicSchemaTestingComponentType>): FormC
           name="combobox"
           type="combobox"
           label="Combobox"
-          comboboxoptions={[
-            { id: 'opcao1', label: 'Opção 1' },
-            { id: 'opcao2', label: 'Opção 2' },
-            { id: 'opcao3', label: 'Opção 3', disabled: true },
-          ]}
+          comboboxoptions={COMBOBOX_OPTIONS}
         />
       ),
       description: 'Campo de seleção que combina entrada manual e lista suspensa de opções.',
@@ -215,14 +175,20 @@ function createCards(control: Control<DynamicSchemaTestingComponentType>): FormC
           name="radio"
           type="radio"
           label="Escolha uma opção"
-          radiooptions={[
-            { id: 'all', label: 'Opção 1', disabled: true },
-            { id: 'mentions', label: 'Opção 2' },
-            { id: 'none', label: 'Opção 3' },
-          ]}
+          radiooptions={RADIO_OPTIONS}
         />
       ),
       description: 'Permite selecionar apenas uma opção dentro de um conjunto.',
+    },
+    {
+      title: 'Slider Único',
+      content: <DynamicForm control={control} name="slider" type="slider" unit="%" titles={['Carregado']} />,
+      description: 'Permite arrastar e escolher um valor dentro de um intervalo.',
+    },
+    {
+      title: 'Slider Duplo',
+      content: <DynamicForm control={control} name="sliderDouble" type="slider" unit="%" titles={['mín', 'máx']} />,
+      description: 'Permite arrastar e escolher dois valores dentro de um intervalo.',
     },
     {
       title: 'Switch',
@@ -232,17 +198,7 @@ function createCards(control: Control<DynamicSchemaTestingComponentType>): FormC
     {
       title: 'Select',
       content: (
-        <DynamicForm
-          control={control}
-          label="Select"
-          name="select"
-          type="select"
-          selectoptions={[
-            { id: 'opcao1', label: 'Opção 1' },
-            { id: 'opcao2', label: 'Opção 2' },
-            { id: 'opcao3', label: 'Opção 3', disabled: true },
-          ]}
-        />
+        <DynamicForm control={control} label="Select" name="select" type="select" selectoptions={SELECT_OPTIONS} />
       ),
       description: 'Campo de seleção com lista de opções, permitindo escolher apenas uma.',
     },
@@ -254,26 +210,7 @@ function createCards(control: Control<DynamicSchemaTestingComponentType>): FormC
           name="multiSelect"
           type="multi-select"
           label="Multi Select"
-          multiselectoptions={[
-            { id: 'opcao1', label: 'Opção 1' },
-            { id: 'opcao2', label: 'Opção 2', disabled: true },
-            { id: 'opcao3', label: 'Opção 3' },
-            { id: 'opcao4', label: 'Opção 4' },
-            { id: 'opcao5', label: 'Opção 5', disabled: true },
-            { id: 'opcao6', label: 'Opção 6' },
-            { id: 'opcao7', label: 'Opção 7' },
-            { id: 'opcao8', label: 'Opção 8', disabled: true },
-            { id: 'opcao9', label: 'Opção 9' },
-            { id: 'opcao10', label: 'Opção 10' },
-            { id: 'opcao20', label: 'Opção 20', disabled: true },
-            { id: 'opcao30', label: 'Opção 30' },
-            { id: 'opcao40', label: 'Opção 40' },
-            { id: 'opcao50', label: 'Opção 50', disabled: true },
-            { id: 'opcao60', label: 'Opção 60' },
-            { id: 'opcao70', label: 'Opção 70' },
-            { id: 'opcao80', label: 'Opção 80', disabled: true },
-            { id: 'opcao90', label: 'Opção 90' },
-          ]}
+          multiselectoptions={MULTISELECT_OPTIONS}
         />
       ),
       description: 'Permite selecionar múltiplas opções de uma lista, com possibilidade de opções desabilitadas.',
@@ -305,7 +242,27 @@ function createCards(control: Control<DynamicSchemaTestingComponentType>): FormC
     },
     {
       title: 'Data e hora inteligente',
-      content: <DynamicForm control={control} label="Data e hora" name="datetime" type="datetime-input" />,
+      content: (
+        <DynamicForm
+          control={control}
+          label="Data e hora"
+          name="datetime"
+          type="datetime-input"
+          disabled={(time: Date) => {
+            const now = new Date();
+            const isToday =
+              time.getFullYear() === now.getFullYear() &&
+              time.getMonth() === now.getMonth() &&
+              time.getDate() === now.getDate();
+            return isToday && time.getHours() >= 14;
+          }}
+          disabledDates={(date: Date) => {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            return date > today;
+          }}
+        />
+      ),
       description: 'Seleciona uma data única usando um calendário interativo ou escreva no input.',
     },
     {
@@ -329,13 +286,15 @@ function ComponentsComponent() {
     resolver: zodResolver(DynamicSchemaTestingComponent),
     mode: 'onChange',
     defaultValues: {
-      checkbox: [],
       input: '',
       cnpj: '',
       password: '',
-      multiSelect: [],
       textarea: '',
+      checkbox: [],
+      multiSelect: [],
       hierarchical: [],
+      slider: [45],
+      sliderDouble: [10, 85],
     },
   });
 
@@ -374,6 +333,8 @@ function ComponentsComponent() {
       hierarchical: [],
       multiSelect: [],
       fileUpload: [],
+      slider: [45],
+      sliderDouble: [10, 85],
     });
   }
 

@@ -9,6 +9,7 @@ import {
   MultiSelectInputSchema,
   RadioInputSchema,
   SelectInputSchema,
+  SliderInputSchema,
   SmartDatetimeInputSchema,
   SwitchInputSchema,
 } from './schemas/fields';
@@ -37,6 +38,7 @@ export const DynamicFormTypeSchema = z
     MultiSelectInputSchema,
     RadioInputSchema,
     SelectInputSchema,
+    SliderInputSchema,
     SwitchInputSchema,
     FileUploadInputSchema,
     DateInputSchema,

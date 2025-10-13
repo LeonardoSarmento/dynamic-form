@@ -155,6 +155,7 @@ function DynamicFormComponent() {
       macAddress: '',
       date: undefined,
       rangeDate: undefined,
+      datetime: undefined,
       checkbox: [],
       multiSelect: [],
     });
@@ -328,6 +329,8 @@ function DynamicFormComponent() {
                   { id: 'none', label: 'Opção 3' },
                 ]}
               />
+              <DynamicForm control={control} name="slider" type="slider" unit="%" titles={['Carregado']} />
+              <DynamicForm control={control} name="sliderDouble" type="slider" unit="%" titles={['mín', 'máx']} />
               <DynamicForm control={form.control} name="switch" type="switch" label="Componente switch" />
               <DynamicForm
                 control={form.control}
@@ -390,6 +393,25 @@ function DynamicFormComponent() {
               />
               <DynamicForm
                 control={control}
+                label="Data e hora"
+                name="datetime"
+                type="datetime-input"
+                disabled={(time: Date) => {
+                  const now = new Date();
+                  const isToday =
+                    time.getFullYear() === now.getFullYear() &&
+                    time.getMonth() === now.getMonth() &&
+                    time.getDate() === now.getDate();
+                  return isToday && time.getHours() >= 14;
+                }}
+                disabledDates={(date: Date) => {
+                  const today = new Date();
+                  today.setHours(0, 0, 0, 0);
+                  return date > today;
+                }}
+              />
+              <DynamicForm
+                control={control}
                 dropzone={{ multiple: true, maxFiles: 7 }}
                 reSelect={false}
                 name="fileUpload"
@@ -431,6 +453,13 @@ You can also pass your custom mask.
 
 ### **Password**
 
+### **Link**
+
+Pre-implemented options include:
+
+1. Email
+2. URL
+
 ### **Text Area**
 
 ### **Date**
@@ -440,7 +469,11 @@ Choose your preferred calendar mode:
 1. Single
 2. Range
 
+### **Datetime**
+
 ### **Select**
+
+### **Slider**
 
 ### **Multiple Select**
 

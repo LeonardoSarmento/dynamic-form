@@ -44,6 +44,17 @@ export const SelectInputSchema = z.object({
   placeholder: z.string().optional(),
 });
 
+export const SliderInputSchema = z.object({
+  /* Array de opções para o component de select. */
+  type: z.literal('slider'),
+  placeholder: z.string().optional(),
+  unit: z.string().optional(),
+  min: z.number().optional(),
+  max: z.number().optional(),
+  step: z.number().optional(),
+  titles: z.array(z.string()).max(2).optional(),
+});
+
 export const MultiSelectInputSchema = z.object({
   type: z.literal('multi-select'),
   /* Array de opções para o component de multi-select. */
@@ -85,7 +96,7 @@ export const DateInputSchema = z.object({
 export const SmartDatetimeInputSchema = z.object({
   /* Array de opções para o component de select. */
   type: z.literal('datetime-input'),
-  disabled: z.tuple([z.boolean(), z.function({ input: z.tuple([z.date()]), output: z.boolean() })]).optional(),
+  disabled: z.union([z.boolean(), z.function({ input: z.tuple([z.date()]), output: z.boolean() })]).optional(),
 });
 
 export const RadioInputSchema = z.object({

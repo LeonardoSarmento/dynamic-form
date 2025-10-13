@@ -4,6 +4,7 @@ import { Command as CommandPrimitive } from 'cmdk';
 
 import { RadioGroupProps } from '@radix-ui/react-radio-group';
 import { SelectTriggerProps } from '@radix-ui/react-select';
+import * as SliderPrimitive from '@radix-ui/react-slider';
 import * as SwitchPrimitives from '@radix-ui/react-switch';
 import { CheckboxProps } from '@radix-ui/react-checkbox';
 
@@ -57,6 +58,10 @@ type SwitchT = Omit<React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root>
   type: 'switch';
 };
 
+type SliderT = Omit<React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root>, 'type'> & {
+  type: 'slider';
+};
+
 type CheckboxT = {
   type: 'checkbox';
 } & Omit<CheckboxProps, 'type'> &
@@ -96,6 +101,7 @@ export type ExtendedFormProps =
   | DateT
   | SmartDateTimeT
   | SelectT
+  | SliderT
   | SwitchT
   | MultiSelectT
   | CheckboxT
