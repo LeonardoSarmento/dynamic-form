@@ -261,13 +261,14 @@ function DynamicComponent<TFieldValues extends FieldValues>({
             disabledTrigger={disabledTrigger || props.disabled}
             placeholder={props.placeholder ?? 'Selecione suas opções'}
             itemsShown={itensShown}
+            options={props.multiselectoptions}
             itemscount={props.multiselectoptions.filter((item) => !item.disabled).length}
           />
           <MultiSelectorContent>
             <MultiSelectorInput {...multiSelectRest} />
             <MultiSelectorList itemsCount={props.multiselectoptions.length}>
               {props.multiselectoptions?.map((item) => (
-                <MultiSelectorItem key={item.id} value={item.label} disabled={item.disabled}>
+                <MultiSelectorItem key={item.id} value={item.id} disabled={item.disabled}>
                   <span>{item.label}</span>
                 </MultiSelectorItem>
               ))}

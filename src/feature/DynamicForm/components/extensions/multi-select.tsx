@@ -20,10 +20,17 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import { Button } from '../ui/button';
 
+type MultiSelectOptionsType = {
+  id: string;
+  label: string;
+  disabled?: boolean | undefined;
+}[];
+
 interface MultiSelectorProps extends React.ComponentPropsWithoutRef<typeof CommandPrimitive> {
   values: string[];
   onValuesChange: (values: string[]) => void;
   loop?: boolean;
+  options?: MultiSelectOptionsType;
   children?: ReactNode;
 }
 
@@ -140,8 +147,8 @@ interface TriggerProps extends React.HTMLAttributes<HTMLButtonElement> {
   children?: ReactNode;
   placeholder?: string;
 }
-const MultiSelectorTrigger = forwardRef<HTMLButtonElement, TriggerProps>(
-  ({ disabledTrigger = false, itemsShown = 3, children, className, ...props }, ref) => {
+const MultiSelectorTrigger = forwardRef<HTMLButtonElement, TriggerProps & { options?: MultiSelectOptionsType }>(
+  ({ disabledTrigger = false, itemsShown = 3, children, options, className, ...props }, ref) => {
     const { values, activeIndex, dispatch } = useMultiSelect();
     const mousePreventDefault = useCallback((e: React.MouseEvent) => {
       e.preventDefault();
@@ -169,27 +176,27 @@ const MultiSelectorTrigger = forwardRef<HTMLButtonElement, TriggerProps>(
           role="listbox"
           aria-multiselectable="true"
         >
-          {displayedValues.map((item, index) => (
+          {displayedValues.map((id, index) => (
             <React.Fragment key={index}>
               <Badge
-                key={item}
+                key={id}
                 className={cn(
                   'border-border flex transform items-center gap-1 rounded-xl border px-2 transition-transform duration-150 hover:scale-105',
                   activeIndex === index && 'ring-muted-foreground ring-2',
                 )}
                 variant="secondary"
               >
-                <span className="text-xs">{item}</span>
+                <span className="text-xs">{options?.find((o) => o.id === id)?.label || id}</span>
                 {!disabledTrigger && (
                   <div
                     role="button"
                     onMouseDown={mousePreventDefault}
-                    onClick={() => dispatch({ type: 'TOGGLE_VALUE', payload: item })}
-                    aria-label={`Remove ${item} option`}
+                    onClick={() => dispatch({ type: 'TOGGLE_VALUE', payload: id })}
+                    aria-label={`Remove ${id} option`}
                     aria-roledescription="button to remove option"
                     className="ml-1"
                   >
-                    <span className="sr-only">Remove {item} option</span>
+                    <span className="sr-only">Remove {id} option</span>
                     <span className="text-muted-foreground hover:text-destructive cursor-pointer transition-colors">
                       <RemoveIcon className="h-4 w-4 stroke-current" />
                     </span>
