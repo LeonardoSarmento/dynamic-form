@@ -32,8 +32,10 @@ export const baseInputSchema = z.object({
 export const ComboboxInputSchema = z.object({
   /* Array de opções para o component de combobox. */
   type: z.literal('combobox'),
+  comboMode: z.enum(['single', 'multiple']).optional(),
   comboboxoptions: ComboboxOptionsSchema,
   placeholder: z.string().optional(),
+  maxVisibleItems: z.number().optional(),
   optionsnotfoundtext: z.string().optional(),
 });
 

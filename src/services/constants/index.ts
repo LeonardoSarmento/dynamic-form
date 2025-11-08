@@ -49,7 +49,12 @@ export const HIERARCHICAL_OPTIONS = [
 export const COMBOBOX_OPTIONS = [
   { id: 'opcao1', label: 'Opção 1' },
   { id: 'opcao2', label: 'Opção 2' },
-  { id: 'opcao3', label: 'Opção 3', disabled: true },
+  { id: 'opcao3', label: 'Opção 3' },
+  { id: 'opcao4', label: 'Opção 4' },
+  { id: 'opcao5', label: 'Opção 5' },
+  { id: 'opcao6', label: 'Opção 6' },
+  { id: 'opcao7', label: 'Opção 7' },
+  { id: 'opcao8', label: 'Opção 8', disabled: true },
 ];
 
 export const RADIO_OPTIONS = [

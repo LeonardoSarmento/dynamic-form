@@ -34,7 +34,7 @@ import { HyperlinkInput } from './components/extensions/hyperlink';
 import { applyCurrencyMask } from './types/schemas/Currency';
 import { HierarchicalCheckbox } from './components/extensions/hierarchical-checkbox';
 import { useCallback } from 'react';
-import { TooltipComponentProvider } from './components/ui/tooltip';
+import { Tooltip, TooltipComponentProvider, TooltipContent, TooltipProvider, TooltipTrigger } from './components/ui/tooltip';
 import { SmartDatetimeInput } from './components/extensions/smart-datetime-input';
 import { Slider } from './components/ui/slider';
 
@@ -335,53 +335,125 @@ function DynamicComponent<TFieldValues extends FieldValues>({
         </FormControl>
       );
     case 'combobox': {
-      const { type, handlecustomselect, ...comboboxRest } = props;
+      const {
+        type,
+        comboMode = 'single',
+        handlecustomselect,
+        maxVisibleItems = 3,
+        ...comboboxRest
+      } = props;
+
+      const isMultiple = comboMode === 'multiple';
+      const selectedValues: string[] = isMultiple
+        ? ((props.field.value as string[] | undefined) ?? [])
+        : props.field.value
+          ? [props.field.value as string]
+          : [];
+
+      const selectedLabels = props.comboboxoptions
+        .filter((opt) => selectedValues.includes(opt.id))
+        .map((opt) => opt.label);
+
+      const visibleLabels = selectedLabels.slice(0, maxVisibleItems);
+      const extraCount = selectedLabels.length - visibleLabels.length;
+
+      const displayLabel = selectedValues.length
+        ? `${visibleLabels.join(', ')}${extraCount > 0 ? ` e + ${extraCount} selecionado${extraCount > 1 ? 's' : ''}` : ''}`
+        : (props.placeholder ?? 'Selecione uma opção');
+
+      const hasTooltip = selectedLabels.length > 1;
+
+      const tooltipContent = (
+        <div className="max-h-40 space-y-1 overflow-y-auto">
+          <p className="text-foreground font-medium">Itens selecionados:</p>
+          <ul className="text-muted-foreground list-disc pl-4 text-sm">
+            {selectedLabels.map((label, i) => (
+              <li key={i}>{label}</li>
+            ))}
+          </ul>
+        </div>
+      );
+
       return (
-        <Popover modal={false}>
-          <PopoverTrigger asChild>
-            <FormControl>
-              <Button
-                {...comboboxRest}
-                variant="outline"
-                role="combobox"
-                className={cn(
-                  `h-9 justify-between text-sm ${!props.field.value && 'text-muted-foreground font-normal'}`,
-                  props.className,
-                )}
-              >
-                {props.field.value
-                  ? props.comboboxoptions.find((item) => item.id === props.field.value)?.label
-                  : (props.placeholder ?? 'Selecione uma opção')}
-                <ChevronsUpDown className="opacity-50" />
-              </Button>
-            </FormControl>
-          </PopoverTrigger>
-          <PopoverContent className="p-0">
-            <Command>
-              <CommandInput placeholder="Procure aqui" className="h-9" />
-              <CommandList>
-                <CommandEmpty>{props.optionsnotfoundtext ?? 'Opção não encontrada'}</CommandEmpty>
-                <CommandGroup>
-                  {props.comboboxoptions.map((item) => (
-                    <CommandItem
-                      key={item.id}
-                      value={item.label}
-                      disabled={item.disabled}
-                      className={props.classNameCommandItem}
-                      onSelect={(value) => {
-                        handlecustomselect?.(value);
-                        props.field.onChange(item.id);
-                      }}
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Popover modal={true}>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      {...comboboxRest}
+                      variant="outline"
+                      role="combobox"
+                      className={cn(
+                        'h-9 w-48 min-w-fit justify-between truncate text-sm',
+                        !selectedValues.length && 'text-muted-foreground font-normal',
+                        props.className,
+                      )}
                     >
-                      {item.label}
-                      <Check className={cn('ml-auto', item.id === props.field.value ? 'opacity-100' : 'opacity-0')} />
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              </CommandList>
-            </Command>
-          </PopoverContent>
-        </Popover>
+                      <span className="truncate">{displayLabel}</span>
+                      <ChevronsUpDown className="ml-1 shrink-0 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+
+                <PopoverContent
+                  className="w-(--radix-popover-trigger-width) p-0"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
+                >
+                  <Command>
+                    <CommandInput placeholder="Procure aqui" className="h-9" />
+                    <CommandList>
+                      <CommandEmpty>{props.optionsnotfoundtext ?? 'Opção não encontrada'}</CommandEmpty>
+                      <CommandGroup>
+                        {props.comboboxoptions.map((item) => {
+                          const isSelected = selectedValues.includes(item.id);
+
+                          return (
+                            <CommandItem
+                              key={item.id}
+                              value={item.label}
+                              disabled={item.disabled}
+                              className={props.classNameCommandItem}
+                              onSelect={() => {
+                                handlecustomselect?.(item.id);
+
+                                if (isMultiple) {
+                                  const newValues = isSelected
+                                    ? selectedValues.filter((v) => v !== item.id)
+                                    : [...selectedValues, item.id];
+                                  props.field.onChange(newValues);
+                                } else {
+                                  props.field.onChange(item.id);
+                                }
+                              }}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                              }}
+                            >
+                              {item.label}
+                              <Check className={cn('ml-auto', isSelected ? 'opacity-100' : 'opacity-0')} />
+                            </CommandItem>
+                          );
+                        })}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+            </TooltipTrigger>
+
+            {hasTooltip && (
+              <TooltipContent side="top" align="start" className="max-w-xs">
+                {tooltipContent}
+              </TooltipContent>
+            )}
+          </Tooltip>
+        </TooltipProvider>
       );
     }
     case 'file-upload':

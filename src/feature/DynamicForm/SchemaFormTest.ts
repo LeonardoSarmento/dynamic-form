@@ -1,10 +1,11 @@
 import { z } from 'zod';
+
+import { MultipleComboboxSchema, SingleComboboxSchema } from '../DynamicForm/types/schemas/Combobox';
 import { DateRangeSchema, DateSchema } from '../DynamicForm/types/schemas/Date';
 import { MultiSelectSchema } from '../DynamicForm/types/schemas/MultiSelect';
 import { FileUploadSchema } from '../DynamicForm/types/schemas/FileUpload';
 import { TextareaSchema } from '../DynamicForm/types/schemas/TextArea';
 import { CheckboxSchema } from '../DynamicForm/types/schemas/Checkbox';
-import { ComboboxSchema } from '../DynamicForm/types/schemas/Combobox';
 import { SwitchSchema } from '../DynamicForm/types/schemas/Switch';
 import { SelectSchema } from '../DynamicForm/types/schemas/Select';
 import { RadioSchema } from '../DynamicForm/types/schemas/RadioGroup';
@@ -13,6 +14,7 @@ import { MacAddress } from '../DynamicForm/types/schemas/MacAddress';
 import { CpfSchema } from '../DynamicForm/types/schemas/Cpf';
 import { IpSchema } from '../DynamicForm/types/schemas/Ip';
 import cnpj from '../DynamicForm/types/schemas/CNPJ';
+
 import { HierarchicalSchema } from './types/schemas/Hierarchical';
 import { DatetimeSchema } from './types/schemas/Datetime';
 import { SliderSchema } from './types/schemas/Slider';
@@ -51,7 +53,8 @@ export const DynamicSchemaTestingComponent = z.object({
     .min(1, 'Valor mínimo de 1.')
     .max(100, 'Valor máximo de 100.'),
   checkbox: CheckboxSchema,
-  combobox: ComboboxSchema,
+  comboboxSingle: SingleComboboxSchema,
+  comboboxMultiple: MultipleComboboxSchema,
   select: SelectSchema,
   slider: SliderSchema,
   sliderDouble: SliderSchema,

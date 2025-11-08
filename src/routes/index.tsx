@@ -155,17 +155,33 @@ function createCards(control: Control<DynamicSchemaTestingComponentType>): FormC
       description: 'Seleção de opções organizadas hierarquicamente, permitindo escolher múltiplos níveis.',
     },
     {
-      title: 'Combobox',
+      title: 'Combobox Único',
       content: (
         <DynamicForm
           control={control}
-          name="combobox"
+          name="comboboxSingle"
           type="combobox"
+          comboMode='single'
           label="Combobox"
           comboboxoptions={COMBOBOX_OPTIONS}
         />
       ),
-      description: 'Campo de seleção que combina entrada manual e lista suspensa de opções.',
+      description: 'Campo de seleção única que combina entrada manual e lista suspensa de opções.',
+    },
+    {
+      title: 'Combobox Múltiplo',
+      content: (
+        <DynamicForm
+          control={control}
+          name="comboboxMultiple"
+          type="combobox"
+          comboMode='multiple'
+          maxVisibleItems={3}
+          label="Combobox"
+          comboboxoptions={COMBOBOX_OPTIONS}
+        />
+      ),
+      description: 'Campo de multipla seleção que combina entrada manual e lista suspensa de opções.',
     },
     {
       title: 'Radio',
@@ -324,7 +340,8 @@ function ComponentsComponent() {
       date: undefined,
       datetime: undefined,
       rangeDate: undefined,
-      combobox: undefined,
+      comboboxSingle: undefined,
+      comboboxMultiple: undefined,
       radio: undefined,
       number: undefined,
       switch: false,

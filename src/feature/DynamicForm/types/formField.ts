@@ -74,6 +74,8 @@ type RadioT = {
 
 type ComboboxItemT = {
   type: 'combobox';
+  comboMode?: 'single' | 'multiple';
+  maxVisibleItems?: number;
   handlecustomselect?: (value: string) => void;
   classNameCommandItem?: string;
 } & Omit<ButtonProps, 'type'> &

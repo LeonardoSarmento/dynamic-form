@@ -19,6 +19,7 @@ import { cn } from '../../lib/utils';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import { Button } from '../ui/button';
+import { NoOptions } from './no-options';
 
 type MultiSelectOptionsType = {
   id: string;
@@ -164,8 +165,8 @@ const MultiSelectorTrigger = forwardRef<HTMLButtonElement, TriggerProps & { opti
           ref={ref}
           variant="outline"
           className={cn(
-            'text-muted-foreground flex h-auto min-h-9 w-full flex-wrap justify-start gap-1 border-0 p-2',
-            activeIndex === -1 && 'ring-1 focus-visible:ring-cyan-600',
+            'text-muted-foreground flex h-auto min-h-9 w-full flex-wrap justify-start gap-1 p-2',
+            activeIndex === -1 && 'focus-visible:ring-cyan-600',
             className,
           )}
           onClick={(e) => {
@@ -308,7 +309,8 @@ const MultiSelectorList = forwardRef<HTMLDivElement, ListProps>(({ className, ch
         filteredChildren
       ) : (
         <CommandEmpty>
-          <span className="text-muted-foreground">Nenhum resultado encontrado.</span>
+          <NoOptions />
+          {/* <span className="text-muted-foreground">Nenhum resultado encontrado.</span> */}
         </CommandEmpty>
       )}
     </CommandList>

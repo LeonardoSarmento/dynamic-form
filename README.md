@@ -126,20 +126,28 @@ function DynamicFormComponent() {
     resolver: zodResolver(DynamicSchemaTestingComponent),
     mode: 'onChange',
     defaultValues: {
-      checkbox: [],
       input: '',
       cnpj: '',
       password: '',
-      multiSelect: [],
       textarea: '',
+      checkbox: [],
+      multiSelect: [],
+      hierarchical: [],
+      slider: [45],
+      sliderDouble: [10, 85],
     },
   });
 
-  const onSubmit = form.handleSubmit(() => {
-    toast.success('Testado com sucesso', {
-      description: 'Todos componentes estão prontos para uso!',
-    });
-  });
+  const onSubmit = form.handleSubmit(
+    () => {
+      toast.success('Testado com sucesso', {
+        description: 'Todos componentes estão prontos para uso!',
+      });
+    },
+    (error) => {
+      showErrorsAsToasts(error);
+    },
+  );
 
   function handleReset() {
     form.reset({
@@ -154,10 +162,20 @@ function DynamicFormComponent() {
       textarea: '',
       macAddress: '',
       date: undefined,
-      rangeDate: undefined,
       datetime: undefined,
+      rangeDate: undefined,
+      comboboxSingle: undefined,
+      comboboxMultiple: undefined,
+      radio: undefined,
+      number: undefined,
+      switch: false,
+      select: undefined,
       checkbox: [],
+      hierarchical: [],
       multiSelect: [],
+      fileUpload: [],
+      slider: [45],
+      sliderDouble: [10, 85],
     });
   }
   return (
@@ -309,9 +327,23 @@ function DynamicFormComponent() {
               />
               <DynamicForm
                 control={form.control}
+                name="comboboxSingle"
+                type="combobox"
+                comboMode="Single"
+                label="Componente Combobox Único"
+                comboboxoptions={[
+                  { id: 'opcao1', label: 'Opção 1' },
+                  { id: 'opcao2', label: 'Opção 2' },
+                  { id: 'opcao3', label: 'Opção 3', disabled: true },
+                ]}
+              />
+              <DynamicForm
+                control={form.control}
                 name="combobox"
                 type="combobox"
-                label="Componente Combobox"
+                comboMode="multiple"
+                maxVisibleItems={3}
+                label="Componente Combobox Múltiplo"
                 comboboxoptions={[
                   { id: 'opcao1', label: 'Opção 1' },
                   { id: 'opcao2', label: 'Opção 2' },
@@ -488,6 +520,11 @@ Choose your preferred calendar mode:
 ### **File Input**
 
 ### **Combobox**
+
+Choose your combobox mode:
+
+1. Single
+2. Multiple
 
 ---
 
